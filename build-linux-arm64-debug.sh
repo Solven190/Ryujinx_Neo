@@ -27,98 +27,53 @@ fi
 
 python3 <<'PY'
 from pathlib import Path
-import re
 import sys
 
 path = Path("src/Ryujinx.HLE/Loaders/Processes/ProcessLoaderHelper.cs")
 text = path.read_text()
 
-if "NEOV2-MEMLIMIT" not in text:
-    print("ERRO: marcador NEOV2-MEMLIMIT não encontrado.")
+old = "long memoryLimit = applicationRgSize + (long)context.MemorySlack;"
+new = "long memoryLimit = applicationRgSize;"
+
+if old not in text:
+    print("ERRO: linha esperada não encontrada.")
+    print()
+    print("Linhas relacionadas encontradas:")
+
+    for i, line in enumerate(text.splitlines(), 1):
+        if (
+            "memoryLimit" in line
+            or "MemorySlack" in line
+            or "NEOV2-MEMLIMIT" in line
+            or "applicationRgSize" in line
+        ):
+            print(f"{i}: {line}")
+
     sys.exit(1)
 
-print("Linhas atuais relacionadas à memória:")
-for i, line in enumerate(text.splitlines(), 1):
-    if (
-        "MemorySlack" in line
-        or "memoryLimit" in line
-        or "NEOV2-MEMLIMIT" in line
-        or "applicationRgSize" in line
-    ):
-        print(f"{i}: {line}")
-
-original = text
-
-# Caso mais provável:
-# ulong memoryLimit = applicationRgSize + context.MemorySlack;
-patterns = [
-    (
-        r'(\bmemoryLimit\s*=\s*)applicationRgSize\s*\+\s*context\.MemorySlack(\s*;)',
-        r'\1applicationRgSize\2'
-    ),
-    (
-        r'(\b(?:ulong|long|nuint|nint|UInt64|Int64)\s+memoryLimit\s*=\s*)'
-        r'applicationRgSize\s*\+\s*context\.MemorySlack(\s*;)',
-        r'\1applicationRgSize\2'
-    ),
-]
-
-changed = False
-
-for pattern, replacement in patterns:
-    text, count = re.subn(pattern, replacement, text, count=1)
-    if count:
-        changed = True
-        break
-
-# Fallback: se a soma estiver diretamente no SetLimitValue.
-if not changed:
-    old = "applicationRgSize + context.MemorySlack"
-
-    if old in text:
-        text = text.replace(old, "applicationRgSize", 1)
-        changed = True
-
-if not changed:
-    print()
-    print("ERRO: não encontrei a expressão esperada:")
-    print("applicationRgSize + context.MemorySlack")
-    print()
-    print("Nenhuma alteração foi feita.")
-    sys.exit(1)
+text = text.replace(old, new, 1)
 
 path.write_text(text)
 
+print("PATCH APLICADO:")
 print()
-print("=== Correção aplicada ===")
-
-for i, line in enumerate(text.splitlines(), 1):
-    if (
-        "MemorySlack" in line
-        or "memoryLimit" in line
-        or "NEOV2-MEMLIMIT" in line
-        or "applicationRgSize" in line
-    ):
-        print(f"{i}: {line}")
-
-if text == original:
-    print("ERRO: arquivo não foi alterado.")
-    sys.exit(1)
-
+print("ANTES:")
+print(old)
 print()
-print("NEOV2-MEMLIMIT corrigido.")
+print("DEPOIS:")
+print(new)
+print()
 PY
 
-echo
-echo "=== Verificação final do patch ==="
+echo "=== Verificando patch ==="
 
 grep -n -E \
     "applicationRgSize|memoryLimit|MemorySlack|NEOV2-MEMLIMIT" \
     "$MEM_FILE" \
-    | head -40 || true
+    | head -30
 
 echo
-echo "=== Selecionando projeto executável ==="
+echo "=== Selecionando projeto ==="
 
 PROJECT=""
 
@@ -152,18 +107,15 @@ if [[ -z "$PROJECT" ]]; then
 fi
 
 if [[ -z "$PROJECT" ]]; then
-    echo "ERRO: não consegui localizar o projeto executável."
-    echo
-    echo "Projetos encontrados:"
-    find . -maxdepth 4 -type f -name '*.csproj' | sort
+    echo "ERRO: projeto executável não encontrado."
     exit 1
 fi
 
-echo "Projeto selecionado:"
+echo "Projeto:"
 echo "$PROJECT"
 
 echo
-echo "=== Limpando saída anterior ==="
+echo "=== Limpando build anterior ==="
 
 rm -rf "$OUT"
 rm -f "$PACKAGE"
@@ -178,7 +130,7 @@ dotnet restore \
     -r "$RID"
 
 echo
-echo "=== Publish Linux ARM64 Debug ==="
+echo "=== Publish ARM64 Debug ==="
 
 dotnet publish \
     "$PROJECT" \
@@ -197,8 +149,6 @@ echo "=== Verificando executável ==="
 
 if [[ ! -f "$OUT/Ryujinx" ]]; then
     echo "ERRO: executável Ryujinx não foi gerado."
-    echo
-    find "$OUT" -maxdepth 1 -type f | sort | head -100
     exit 1
 fi
 
@@ -207,14 +157,10 @@ chmod +x "$OUT/Ryujinx"
 file "$OUT/Ryujinx"
 
 echo
-echo "=== Cabeçalho ELF ==="
-
-readelf -h "$OUT/Ryujinx" \
-    | grep -E 'Class|Machine' \
-    || true
+readelf -h "$OUT/Ryujinx" | grep -E 'Class|Machine' || true
 
 echo
-echo "=== Criando BUILD-INFO.txt ==="
+echo "=== Criando BUILD-INFO ==="
 
 {
     echo "branch=$(git branch --show-current)"
@@ -223,7 +169,7 @@ echo "=== Criando BUILD-INFO.txt ==="
     echo "runtime=$RID"
     echo "configuration=$CONFIG"
     echo "project=$PROJECT"
-    echo "neo_memlimit_fix=MemorySlack_removed_from_memoryLimit"
+    echo "neo_memlimit_fix=MemorySlack_removed"
     echo
     dotnet --info
 } > "$OUT/BUILD-INFO.txt"
@@ -249,5 +195,4 @@ echo
 echo "Pacote:"
 echo "$PACKAGE"
 
-echo
 ls -lh "$PACKAGE"
