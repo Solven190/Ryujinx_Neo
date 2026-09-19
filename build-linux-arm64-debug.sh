@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+cd "$(dirname "$(realpath "$0")")"
+
 RID="linux-arm64"
 CONFIG="Debug"
 OUT="$PWD/artifacts/neo-linux-arm64-debug"
@@ -10,36 +12,8 @@ echo "Arquitetura do runner:"
 uname -m
 echo
 
-# Localiza o projeto principal
-PROJECT=""
-
-for p in \
-    "src/Ryujinx/Ryujinx.csproj" \
-    "src/Ryujinx.Ava/Ryujinx.Ava.csproj" \
-    "Ryujinx/Ryujinx.csproj"
-do
-    if [[ -f "$p" ]]; then
-        PROJECT="$p"
-        break
-    fi
-done
-
-if [[ -z "$PROJECT" ]]; then
-    echo "Projeto padrão não encontrado. Procurando..."
-
-    while IFS= read -r p; do
-        if grep -q "<OutputType>" "$p"; then
-            PROJECT="$p"
-            break
-        fi
-    done < <(find . -type f -name "*.csproj" | sort)
-fi
-
-if [[ -z "$PROJECT" ]]; then
-    echo "ERRO: não encontrei o projeto executável."
-    find . -name "*.csproj"
-    exit 1
-fi
+PROJECT="src/Ryujinx/Ryujinx.csproj"
+test -f "$PROJECT"
 
 echo "Projeto:"
 echo "$PROJECT"
@@ -47,6 +21,9 @@ echo
 
 rm -rf "$OUT"
 mkdir -p "$OUT"
+
+echo "=== Clean ==="
+dotnet clean "$PROJECT" -c "$CONFIG" -r "$RID"
 
 echo "=== Restore ==="
 
@@ -66,6 +43,17 @@ dotnet publish "$PROJECT" \
     -p:PublishSingleFile=false \
     -p:PublishTrimmed=false \
     -p:PublishReadyToRun=false
+
+echo "=== Verificando assemblies, símbolos e runtime ARM64 ==="
+for file in Ryujinx Ryujinx.dll Ryujinx.pdb Ryujinx.Common.dll Ryujinx.Common.pdb \
+    Ryujinx.Graphics.Vulkan.dll Ryujinx.Graphics.Vulkan.pdb libcoreclr.so \
+    libhostfxr.so libhostpolicy.so Ryujinx.runtimeconfig.json Ryujinx.deps.json; do
+    test -s "$OUT/$file"
+done
+file "$OUT/Ryujinx" "$OUT/libcoreclr.so"
+readelf -h "$OUT/Ryujinx" | grep -q 'Machine:.*AArch64'
+readelf -h "$OUT/libcoreclr.so" | grep -q 'Machine:.*AArch64'
+chmod +x "$OUT/Ryujinx" "$OUT/Ryujinx.sh"
 
 echo
 echo "=== Informações da build ==="
