@@ -1,0 +1,75 @@
+name: Build Neo Linux ARM64 Debug
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - neo-v2-fase1
+
+permissions:
+  contents: read
+
+jobs:
+  build-arm64:
+    name: Linux ARM64 Debug
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout neo-v2-fase1
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Show architecture
+        run: |
+          uname -a
+          uname -m
+
+      - name: Setup .NET from global.json
+        if: ${{ hashFiles('global.json') != '' }}
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Setup .NET fallback
+        if: ${{ hashFiles('global.json') == '' }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+
+          sudo apt-get install -y \
+            build-essential \
+            clang \
+            cmake \
+            ninja-build \
+            pkg-config \
+            git \
+            libx11-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libxext-dev \
+            libwayland-dev
+
+      - name: Show .NET information
+        run: dotnet --info
+
+      - name: Build Ryujinx Neo ARM64
+        run: |
+          chmod +x ./build-linux-arm64-debug.sh
+          ./build-linux-arm64-debug.sh
+
+      - name: Upload ARM64 build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ryujinx-Neo-linux-arm64-Debug
+          path: artifacts/Ryujinx-Neo-linux-arm64-Debug.tar.gz
+          if-no-files-found: error
+          retention-days: 14
