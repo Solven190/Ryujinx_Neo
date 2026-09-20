@@ -336,7 +336,7 @@ namespace Ryujinx.HLE.Loaders.Processes
             KResourceLimit resourceLimit = new(context);
 
             long applicationRgSize = (long)context.MemoryManager.MemoryRegions[(int)MemoryRegion.Application].Size;
-            long memoryLimit = applicationRgSize + (long)context.MemorySlack;
+            long memoryLimit = applicationRgSize;
             result = resourceLimit.SetLimitValue(LimitableResource.Memory, memoryLimit);
 
             Logger.Info?.Print(LogClass.Loader, $"[NEOV2-MEMLIMIT] ApplicationRegion={applicationRgSize / 1024 / 1024}MB slack={context.MemorySlack / 1024 / 1024}MB total={memoryLimit / 1024 / 1024}MB");

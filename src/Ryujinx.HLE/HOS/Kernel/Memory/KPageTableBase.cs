@@ -235,7 +235,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Memory
 
                 case ProcessCreationFlags.AddressSpace64Bit:
                     ulong reservedAddressSpaceSize = _reservedAddressSpaceSize;
-                    if (_reservedAddressSpaceSize < addrSpaceEnd)
+                    if (_reservedAddressSpaceSize <= addrSpaceEnd)
                     {
                         int addressSpaceWidth = (int)ulong.Log2(reservedAddressSpaceSize);
 

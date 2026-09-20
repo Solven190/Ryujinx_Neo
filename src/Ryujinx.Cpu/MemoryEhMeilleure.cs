@@ -19,6 +19,8 @@ namespace Ryujinx.Cpu
         private readonly ulong _baseAddress;
         private readonly ulong _mirrorAddress;
 
+        public ulong NceTrackingAddressOffset;
+
         public MemoryEhMeilleure(MemoryBlock addressSpace, MemoryBlock addressSpaceMirror, MemoryTracking tracking, TrackingEventDelegate trackingEvent = null)
         {
             _baseAddress = (ulong)addressSpace.Pointer;
@@ -80,7 +82,7 @@ namespace Ryujinx.Cpu
             ulong endAddressAligned = BitUtils.AlignUp(address + size, pageSize);
             ulong sizeAligned = endAddressAligned - addressAligned;
 
-            if (_tracking.VirtualMemoryEvent(addressAligned, sizeAligned, write))
+            if (_tracking.VirtualMemoryEvent(addressAligned + NceTrackingAddressOffset, sizeAligned, write))
             {
                 return _baseAddress + address;
             }

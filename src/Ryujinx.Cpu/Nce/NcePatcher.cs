@@ -440,13 +440,15 @@ namespace Ryujinx.Cpu.Nce
 
             WriteLoadContextSafe(asm, lblFail, Gpr(scratchRegs[0]), Gpr(scratchRegs[1]), Gpr(scratchRegs[2]), Gpr(scratchRegs[3]));
 
+            // Acquire before switching to HostSP so a pending
+            // suspend signal can be serviced without nesting on HostSP.
+            WriteInManagedLockAcquire(asm, Gpr(scratchRegs[0]), Gpr(scratchRegs[1]), Gpr(scratchRegs[3]));
             asm.LdrRiUn(Gpr(scratchRegs[1]), Gpr(scratchRegs[0]), NceNativeContext.GetHostSPOffset());
             asm.MovSp(Gpr(scratchRegs[2]), Gpr(Assembler.SpRegister));
             asm.MovSp(Gpr(Assembler.SpRegister), Gpr(scratchRegs[1]));
 
             // SigSegv
 
-            WriteInManagedLockAcquire(asm, Gpr(scratchRegs[0]), Gpr(scratchRegs[1]), Gpr(scratchRegs[3]));
 
             asm.Mov(Gpr(scratchRegs[3]), (ulong)signalHandlerPtr);
             asm.Blr(Gpr(scratchRegs[3]));
@@ -462,6 +464,7 @@ namespace Ryujinx.Cpu.Nce
             asm.MarkLabel(lblFail);
 
             rsr.WriteEpilogue(asm);
+
 
             asm.Mov(Gpr(3), (ulong)oldSignalHandlerSegfaultPtr);
             asm.Br(Gpr(3));

@@ -47,26 +47,19 @@ namespace Ryujinx.Cpu
 
         public static bool TryCreateWithoutMirror(ulong asSize, out MemoryBlock addressSpace)
         {
-            addressSpace = null;
+            const ulong NceAddressSpaceBase = 0x4000000000UL;
+            const ulong NceAddressSpaceSize = 0x4000000000UL;
 
-            ulong minAddressSpaceSize = Math.Min(asSize, 1UL << 36);
+            MemoryBlock memoryBlock = new(NceAddressSpaceSize, AsFlags);
 
-            // Attempt to create the address space with expected size or try to reduce it until it succeed.
-            for (ulong addressSpaceSize = asSize; addressSpaceSize >= minAddressSpaceSize; addressSpaceSize -= 0x100000000UL)
+            if ((ulong)(nuint)memoryBlock.Pointer != NceAddressSpaceBase)
             {
-                try
-                {
-                    MemoryBlock baseMemory = new(addressSpaceSize, AsFlags);
-                    addressSpace = baseMemory;
-
-                    break;
-                }
-                catch (SystemException)
-                {
-                }
+                memoryBlock.Dispose();
+                throw new SystemException("NCE probe: kernel did not return the requested low 39-bit address range");
             }
 
-            return addressSpace != null;
+            addressSpace = memoryBlock;
+            return true;
         }
 
         public void Map(ulong va, ulong pa, ulong size, MemoryMapFlags flags)
