@@ -1,4 +1,4 @@
-using Ryujinx.Common.Diagnostics;
+Ôªøusing Ryujinx.Common.Diagnostics;
 using Ryujinx.Common.Configuration;
 using Ryujinx.Common.Logging;
 using Ryujinx.Graphics.GAL;
@@ -47,6 +47,7 @@ namespace Ryujinx.Graphics.Vulkan
         internal KhrPushDescriptor PushDescriptorApi { get; private set; }
         internal ExtTransformFeedback TransformFeedbackApi { get; private set; }
         internal KhrDrawIndirectCount DrawIndirectCountApi { get; private set; }
+        internal KhrPipelineExecutableProperties PipelineExecutablePropertiesApi { get; private set; }
         internal ExtAttachmentFeedbackLoopDynamicState DynamicFeedbackLoopApi { get; private set; }
 
         internal uint QueueFamilyIndex { get; private set; }
@@ -114,11 +115,17 @@ namespace Ryujinx.Graphics.Vulkan
         internal bool IsQualcommProprietary { get; private set; }
         internal bool IsTurnip { get; private set; }
 
-        // NEOV2 CONDRENDER1: Eden skips waiting for conditional rendering values on these drivers.
+        // NEOV2 CONDRENDER1
         public bool PreferUnconditionalRenderingOverReadback => (IsTurnip || IsQualcommProprietary) && NeoGraphicsSettings.ConditionalRenderNoWaitEnabled;
+
         internal bool IsMoltenVk { get; private set; }
         internal bool IsTBDR { get; private set; }
         internal bool IsSharedMemory { get; private set; }
+
+        // NEOV2-DYNAMIC-UBO1: Used to keep dynamic uniform layouts within the
+        // limit advertised by the active Vulkan device.
+        internal uint MaxDynamicUniformBuffers =>
+            _physicalDevice.PhysicalDeviceProperties.Limits.MaxDescriptorSetUniformBuffersDynamic;
 
         public string GpuVendor { get; private set; }
         public string GpuDriver { get; private set; }
@@ -176,6 +183,11 @@ namespace Ryujinx.Graphics.Vulkan
             if (Api.TryGetDeviceExtension(_instance.Instance, _device, out KhrDrawIndirectCount drawIndirectCountApi))
             {
                 DrawIndirectCountApi = drawIndirectCountApi;
+            }
+
+            if (Api.TryGetDeviceExtension(_instance.Instance, _device, out KhrPipelineExecutableProperties pipelineExecutablePropertiesApi))
+            {
+                PipelineExecutablePropertiesApi = pipelineExecutablePropertiesApi;
             }
 
             if (Api.TryGetDeviceExtension(_instance.Instance, _device, out ExtAttachmentFeedbackLoopDynamicState dynamicFeedbackLoopApi))
@@ -255,10 +267,9 @@ namespace Ryujinx.Graphics.Vulkan
                 properties2.PNext = &propertiesPushDescriptor;
             }
 
-            // NEOV2 TEXBUF-ALIGN1: drivers que expıem VK_EXT_texel_buffer_alignment com alinhamento
-            // de um ˙nico texel (ex.: Turnip) aceitam o offset exato da view de texture buffer.
-            // Nesses drivers a view n„o pode ser deslocada para frente, sen„o o shader lÍ o dado errado.
-            bool supportsTexelBufferAlignment = _physicalDevice.IsDeviceExtensionPresent("VK_EXT_texel_buffer_alignment");
+            // NEOV2 TEXBUF-ALIGN1: Turnip pode aceitar offset exato de texture buffer.
+            bool supportsTexelBufferAlignment =
+                _physicalDevice.IsDeviceExtensionPresent("VK_EXT_texel_buffer_alignment");
 
             PhysicalDeviceTexelBufferAlignmentPropertiesEXT propertiesTexelBufferAlignment = new()
             {
@@ -464,7 +475,8 @@ namespace Ryujinx.Graphics.Vulkan
                 properties.Limits.MinTexelBufferOffsetAlignment
             );
 
-            bool texelBufferSingleTexelAlignment = supportsTexelBufferAlignment &&
+            bool texelBufferSingleTexelAlignment =
+                supportsTexelBufferAlignment &&
                 propertiesTexelBufferAlignment.UniformTexelBufferOffsetSingleTexelAlignment &&
                 propertiesTexelBufferAlignment.StorageTexelBufferOffsetSingleTexelAlignment &&
                 NeoGraphicsSettings.TexelBufferExactOffsetEnabled;
@@ -526,21 +538,27 @@ namespace Ryujinx.Graphics.Vulkan
             Api.TryGetDeviceExtension(_instance.Instance, _device, out ExtExternalMemoryHost hostMemoryApi);
             HostMemoryAllocator = new HostMemoryAllocator(MemoryAllocator, Api, hostMemoryApi, _device);
 
-            // NEOV2 TURNIP-FENCE1: no Turnip (kgsl) a timeline e emulada pelo Mesa. Cada consulta ou espera
-            // faz uma chamada ao kernel segurando uma trava unica da timeline, que serializa backend, submit
-            // e GPU thread. O Eden desliga timeline no Turnip (Device::HasTimelineSemaphore) e usa VkFence.
-            bool useTimelineSemaphore = SupportsTimelineSemaphore && !(IsTurnip && NeoGraphicsSettings.TurnipFenceEnabled);
+            // NEOV2 TURNIP-FENCE1:
+            // o Turnip usa VkFence para completion em vez da timeline emulada pelo KGSL.
+            // NEOV2 GLOBAL-TIMELINE-BATCH1: use timeline completion and submit batching by
+            // default on Turnip. Per-game profiles can still disable it for compatibility.
+            bool useTimelineSemaphore =
+                SupportsTimelineSemaphore &&
+                (!(IsTurnip && NeoGraphicsSettings.TurnipFenceEnabled) ||
+                 NeoGraphicsSettings.TurnipTimelineBatchingEnabled);
 
             QueueSubmissionWorker = new VulkanSubmissionWorker(Api, _device, Queue, QueueLock, _submissionGraphGate, useTimelineSemaphore, "Kenji Vulkan Main Submit");
             BackgroundQueueSubmissionWorker = BackgroundQueue.Handle != 0
                 ? new VulkanSubmissionWorker(Api, _device, BackgroundQueue, BackgroundQueueLock, _submissionGraphGate, useTimelineSemaphore, "Kenji Vulkan Background Submit")
                 : QueueSubmissionWorker;
 
-            Logger.Info?.Print(LogClass.Gpu, $"[NEOV2-ETAPA2] Vulkan timeline semaphore completion: {(useTimelineSemaphore ? "Enabled" : (SupportsTimelineSemaphore ? "Fence fallback (Turnip, TURNIP-FENCE1)" : "Fence fallback"))}");
+            Logger.Info?.Print(LogClass.Gpu, $"[NEOV2-ETAPA2] Vulkan timeline semaphore completion: {(useTimelineSemaphore ? (NeoGraphicsSettings.TurnipTimelineBatchingEnabled ? "Enabled (global submit batching)" : "Enabled") : (SupportsTimelineSemaphore ? "Fence fallback (Turnip, TURNIP-FENCE1)" : "Fence fallback"))}");
             Logger.Info?.Print(LogClass.Gpu, $"[NEOV2-ETAPA4B] Turnip image view format lists: {(IsTurnip ? "Enabled" : "Disabled")}");
-            Logger.Info?.Print(LogClass.Gpu, $"[NEOV2-TEXBUF-ALIGN1] Texel buffer view offset: {(texelBufferSingleTexelAlignment ? "exact (single texel alignment)" : $"aligned up to {minTexelBufferViewOffsetAlignment} bytes")}");
-                        // NEOV2 AUTOFLUSH1-FIX1: o teto por frame depende do modo efetivo do seletor, entao a linha
-            // nao pode mais imprimir 4 fixo.
+            Logger.Info?.Print(
+                LogClass.Gpu,
+                $"[NEOV2-TEXBUF-ALIGN1] Texel buffer view offset: {(texelBufferSingleTexelAlignment ? "exact (single texel alignment)" : $"aligned up to {minTexelBufferViewOffsetAlignment} bytes")}");
+            // NEOV2 AUTOFLUSH1-FIX1:
+            // o teto efetivo depende do seletor.
             string drawFlushCap = NeoGraphicsSettings.DrawFlushMode switch
             {
                 DrawFlushMode.Reduced => "1",
@@ -548,7 +566,9 @@ namespace Ryujinx.Graphics.Vulkan
                 _ => IsTurnip ? "4" : "unbounded",
             };
 
-            Logger.Info?.Print(LogClass.Gpu, $"[NEOV2-FLUSH-R3] Turnip adaptive fast-flush guard: {(IsTurnip ? "Enabled" : "Not applicable")} drawFlushMode={NeoGraphicsSettings.DrawFlushMode} maxDrawFlushesPerFrame={drawFlushCap} exitThresholdMs=0.75");
+            Logger.Info?.Print(
+                LogClass.Gpu,
+                $"[NEOV2-FLUSH-R3] Turnip adaptive fast-flush guard: {(IsTurnip ? "Enabled" : "Not applicable")} drawFlushMode={NeoGraphicsSettings.DrawFlushMode} maxDrawFlushesPerFrame={drawFlushCap} exitThresholdMs=0.75");
             GezinjinxGuestStallTelemetry.Enable();
 
             CommandBufferPool = new CommandBufferPool(Api, _device, QueueSubmissionWorker, queueFamilyIndex, IsQualcommProprietary, IsTurnip);
@@ -1197,7 +1217,7 @@ namespace Ryujinx.Graphics.Vulkan
                 }
                 catch
                 {
-                    // retry sp‰ter
+                    // retry sp√§ter
                     return false;
                 }
             }
