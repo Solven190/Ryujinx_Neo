@@ -1,3 +1,4 @@
+using Ryujinx.Common.Logging;
 using ARMeilleure.Memory;
 using Ryujinx.Memory;
 using Ryujinx.Memory.Range;
@@ -132,7 +133,25 @@ namespace Ryujinx.Cpu.Nce
         public void Reprotect(ulong va, ulong size, MemoryPermission protection)
         {
             _addressSpace.Reprotect(AddressToOffset(va), size, protection);
+
+            if (TrackingProtectionRestoreEnabled &&
+                Tracking.RestoreGuestProtection(va, size) &&
+                !_protectionRestoreLogged)
+            {
+                _protectionRestoreLogged = true;
+
+                Logger.Info?.Print(
+                    LogClass.Cpu,
+                    $"[NEOV2-NCE-PROT1] Tracking protection restored after a guest permission change at 0x{va:X} (0x{size:X} bytes)");
+            }
         }
+
+        private static bool _protectionRestoreLogged;
+
+        /// <summary>
+        /// NCE-PROT1. Disabled by default until enabled by a game profile.
+        /// </summary>
+        public static bool TrackingProtectionRestoreEnabled { get; set; } = false;
 
         public ref T GetRef<T>(ulong va) where T : unmanaged
         {
