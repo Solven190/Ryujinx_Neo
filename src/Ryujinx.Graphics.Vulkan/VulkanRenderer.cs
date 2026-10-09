@@ -918,7 +918,12 @@ namespace Ryujinx.Graphics.Vulkan
                     (IsTurnip && Environment.GetEnvironmentVariable("RYUJINX_TOTK_TURNIP_GATHER_BIAS") != "0")
                         ? (int)Capabilities.SubTexelPrecisionBits
                         : 0,
-                maximumGpuMemory: GetTotalGPUMemory());
+                maximumGpuMemory: GetTotalGPUMemory(),
+                // Turnip: sRGB/UNORM pairs share the UBWC class and are declared in the image view format list
+                // (TextureStorage.BuildTurnipViewFormatList), so they can be real views instead of copies.
+                // RYUJINX_NEO_SRGB_VIEWS=0 disables it (A/B testing).
+                supportsSrgbMismatchingViewFormat: IsTurnip &&
+                    Environment.GetEnvironmentVariable("RYUJINX_NEO_SRGB_VIEWS") != "0");
         }
 
         private ulong GetTotalGPUMemory()
