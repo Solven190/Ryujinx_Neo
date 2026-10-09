@@ -123,7 +123,9 @@ namespace Ryujinx.Graphics.Vulkan
                     PNext = &imageViewUsage,
                 };
 
+                long neoS4 = System.Diagnostics.Stopwatch.GetTimestamp();
                 gd.Api.CreateImageView(device, in imageCreateInfo, null, out ImageView imageView).ThrowOnError();
+                if (Ryujinx.Common.Diagnostics.NeoHitchStats.Enabled) Ryujinx.Common.Diagnostics.NeoHitchStats.AddStep(4, neoS4);
                 return new Auto<DisposableImageView>(new DisposableImageView(gd.Api, device, imageView), null, storage.GetImage());
             }
 
@@ -211,8 +213,38 @@ namespace Ryujinx.Graphics.Vulkan
             return _imageView2dArray ?? _imageViewDraw;
         }
 
+        // PERF2 (diag): RYUJINX_NEO_COPY_STATS=1 logs texture copy counts by format/size every 5 s.
+        private static readonly bool _copyStatsEnabled = System.Environment.GetEnvironmentVariable("RYUJINX_NEO_COPY_STATS") == "1";
+        private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, int> _copyStats = new();
+        private static long _copyStatsLast = System.Diagnostics.Stopwatch.GetTimestamp();
+
+        private void CopyStatsPerf2(string kind, ITexture destination)
+        {
+            if (!_copyStatsEnabled)
+            {
+                return;
+            }
+
+            TextureView d = destination as TextureView;
+            string key = $"{kind} {Info.Format}->{d?.Info.Format} {Info.Width}x{Info.Height}->{d?.Info.Width}x{d?.Info.Height} {Info.Target}";
+            _copyStats.AddOrUpdate(key, 1, (_, v) => v + 1);
+
+            if (System.Diagnostics.Stopwatch.GetElapsedTime(_copyStatsLast).TotalSeconds >= 5)
+            {
+                _copyStatsLast = System.Diagnostics.Stopwatch.GetTimestamp();
+                var sb = new System.Text.StringBuilder("[NEO-COPYSTATS]");
+                foreach (var kv in _copyStats)
+                {
+                    sb.Append($" | {kv.Value}x {kv.Key}");
+                }
+                _copyStats.Clear();
+                Ryujinx.Common.Logging.Logger.Info?.Print(Ryujinx.Common.Logging.LogClass.Gpu, sb.ToString());
+            }
+        }
+
         public void CopyTo(ITexture destination, int firstLayer, int firstLevel)
         {
+            CopyStatsPerf2("c0", destination);
             TextureView src = this;
             TextureView dst = (TextureView)destination;
 
@@ -275,6 +307,7 @@ namespace Ryujinx.Graphics.Vulkan
 
         public void CopyTo(ITexture destination, int srcLayer, int dstLayer, int srcLevel, int dstLevel)
         {
+            CopyStatsPerf2("c1", destination);
             TextureView src = this;
             TextureView dst = (TextureView)destination;
 
@@ -332,6 +365,7 @@ namespace Ryujinx.Graphics.Vulkan
 
         public void CopyTo(ITexture destination, Extents2D srcRegion, Extents2D dstRegion, bool linearFilter)
         {
+            CopyStatsPerf2("c2", destination);
             TextureView dst = (TextureView)destination;
 
             if (_gd.CommandBufferPool.OwnedByCurrentThread)
@@ -782,10 +816,24 @@ namespace Ryujinx.Graphics.Vulkan
             data.Dispose();
         }
 
-        private static readonly bool _useStagingForTextureUploads =
-            Environment.GetEnvironmentVariable("RYUJINX_NEO_TEX_STAGING") != "0";
-
         private void SetData(ReadOnlySpan<byte> data, int layer, int level, int layers, int levels, bool singleSlice, Rectangle<int>? region = null)
+        {
+            long neoT0 = System.Diagnostics.Stopwatch.GetTimestamp();
+            try
+            {
+                SetDataImpl(data, layer, level, layers, levels, singleSlice, region);
+            }
+            finally
+            {
+                if (Ryujinx.Common.Diagnostics.NeoHitchStats.Enabled) Ryujinx.Common.Diagnostics.NeoHitchStats.AddBackendUpload(neoT0);
+            }
+        }
+
+        // RYUJINX_NEO_TEX_STAGING=0 restores the per-upload temporary buffer (A/B testing).
+        private static readonly bool _useStagingForTextureUploads =
+            System.Environment.GetEnvironmentVariable("RYUJINX_NEO_TEX_STAGING") != "0";
+
+        private void SetDataImpl(ReadOnlySpan<byte> data, int layer, int level, int layers, int levels, bool singleSlice, Rectangle<int>? region)
         {
             int bufferDataLength = GetBufferDataLength(data.Length);
 
@@ -802,10 +850,10 @@ namespace Ryujinx.Graphics.Vulkan
                 _gd.PipelineInternal.EndRenderPass();
             }
 
-            // Upload through the persistent staging ring buffer when there is room, instead of creating (and allocating
-            // memory for) a temporary buffer on every texture upload. The reservation is tied to the command buffer
-            // fence, so the range is only reused after the copy completes. Offset alignment 64 covers every texel block
-            // size and the 4-byte depth/stencil rule. RYUJINX_NEO_TEX_STAGING=0 restores the old path (A/B testing).
+            // Upload through the persistent staging ring buffer when there is room, instead of creating
+            // (and allocating memory for) a temporary buffer on every texture upload. The reservation is
+            // tied to the command buffer fence, so the range is only reused after the copy completes.
+            // Offset alignment 64 covers every texel block size and the 4-byte depth/stencil rule.
             StagingBufferReserved? staged = _useStagingForTextureUploads
                 ? _gd.BufferManager.StagingBuffer.TryReserveData(cbs, bufferDataLength, 64)
                 : null;
