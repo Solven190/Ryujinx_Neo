@@ -118,11 +118,8 @@ namespace Ryujinx.Graphics.Gpu.Shader
         private static string GetDiskCachePath()
         {
             // Keep the former guarded cache in its original directory so MUA3 can reuse it.
-            // The accuracy-first mode gets a separate cache and cannot accidentally load
-            // binaries that already contain the loop counter.
-            // The suffix changes whenever the vertex/geometry to compute policy changes, so binaries
-            // compiled under the previous policy are never reused.
-            string cacheDirectory = GraphicsConfig.EnableShaderLoopSafety ? "shader-vtgp1" : "shader-no-loop-guard-vtgp1";
+            // Keep the cache without the removed shader loop guard.
+            string cacheDirectory = "shader-no-loop-guard-vtgp1";
 
             // NEOV2-GMEMFB1: "Memoria de GPU estilo Eden" changes how global memory is translated.
             if (GraphicsConfig.EdenGpuMemory)

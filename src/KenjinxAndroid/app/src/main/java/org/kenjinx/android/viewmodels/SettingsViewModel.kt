@@ -54,9 +54,7 @@ class SettingsViewModel(val activity: MainActivity) {
         fsGlobalAccessLogMode: MutableState<Int>,
         ignoreMissingServices: MutableState<Boolean>,
         enableShaderCache: MutableState<Boolean>,
-        enableShaderLoopSafety: MutableState<Boolean>,
         enableTextureRecompression: MutableState<Boolean>,
-        enableVtgViaCompute: MutableState<Boolean>,
         drawFlushMode: MutableState<Int>,
         bufferReadbackMode: MutableState<Int>,
         strictSyncMode: MutableState<Int>,
@@ -101,9 +99,7 @@ class SettingsViewModel(val activity: MainActivity) {
         fsGlobalAccessLogMode.value = sharedPref.getInt("fsGlobalAccessLogMode", 0)
         ignoreMissingServices.value = sharedPref.getBoolean("ignoreMissingServices", false)
         enableShaderCache.value = sharedPref.getBoolean("enableShaderCache", true)
-        enableShaderLoopSafety.value = sharedPref.getBoolean("enableShaderLoopSafety", false)
         enableTextureRecompression.value = sharedPref.getBoolean("enableTextureRecompression", false)
-        enableVtgViaCompute.value = sharedPref.getBoolean("enableVtgViaCompute", true)
         drawFlushMode.value = sharedPref.getInt("drawFlushMode", 0)
         bufferReadbackMode.value = sharedPref.getInt("bufferReadbackMode", 0)
         strictSyncMode.value = sharedPref.getInt("strictSyncMode", 0)
@@ -153,9 +149,7 @@ class SettingsViewModel(val activity: MainActivity) {
         fsGlobalAccessLogMode: MutableState<Int>,
         ignoreMissingServices: MutableState<Boolean>,
         enableShaderCache: MutableState<Boolean>,
-        enableShaderLoopSafety: MutableState<Boolean>,
         enableTextureRecompression: MutableState<Boolean>,
-        enableVtgViaCompute: MutableState<Boolean>,
         drawFlushMode: MutableState<Int>,
         bufferReadbackMode: MutableState<Int>,
         strictSyncMode: MutableState<Int>,
@@ -199,9 +193,7 @@ class SettingsViewModel(val activity: MainActivity) {
             putInt("fsGlobalAccessLogMode", fsGlobalAccessLogMode.value)
             putBoolean("ignoreMissingServices", ignoreMissingServices.value)
             putBoolean("enableShaderCache", enableShaderCache.value)
-            putBoolean("enableShaderLoopSafety", enableShaderLoopSafety.value)
             putBoolean("enableTextureRecompression", enableTextureRecompression.value)
-            putBoolean("enableVtgViaCompute", enableVtgViaCompute.value)
             putInt("drawFlushMode", drawFlushMode.value)
             putInt("bufferReadbackMode", bufferReadbackMode.value)
             putInt("strictSyncMode", strictSyncMode.value)

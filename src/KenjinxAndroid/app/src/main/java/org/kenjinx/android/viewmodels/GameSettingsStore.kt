@@ -46,46 +46,11 @@ class GameSettingsStore(activity: Activity, titleId: String) {
             if (isValid) preferences.edit { putString(key("driverOverride"), value) }
         }
 
-    /** NEOV2 NCE-PROT1: 0: Use Global, 1: Enabled, 2: Disabled */
-    var nceTrackingProtectionMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("nceTrackingProtectionMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("nceTrackingProtectionMode"), value) }
-        }
-
-    /** NEOV2-VP9EDEN1: VP9 pelo FFmpeg por jogo. 0: Use Global, 1: Enabled, 2: Disabled */
-    var vp9FFmpegMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("vp9FFmpegMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("vp9FFmpegMode"), value) }
-        }
-
     /** NEOV2-GPUMEM1: 0: Use Global, 1: Enabled, 2: Disabled */
     var edenGpuMemoryMode: Int
         get() = if (!isValid) 0 else preferences.getInt(key("edenGpuMemoryMode"), 0)
         set(value) {
             if (isValid) preferences.edit { putInt(key("edenGpuMemoryMode"), value) }
-        }
-
-    /** NEOV2 DMA-RELAX1: 0: Use Global, 1: Enabled, 2: Disabled */
-    var relaxedDmaCopyMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("relaxedDmaCopyMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("relaxedDmaCopyMode"), value) }
-        }
-
-    /** 0: Use Global, 1: Enabled, 2: Disabled */
-    var rejectUnmappedDescriptorsMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("rejectUnmappedDescriptorsMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("rejectUnmappedDescriptorsMode"), value) }
-        }
-
-    /** 0: Use Global, 1: Enabled, 2: Disabled */
-    var asyncLarge3DUploadMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("asyncLarge3DUploadMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("asyncLarge3DUploadMode"), value) }
         }
 
     /** Compatibilidade grafica 2D (correcoes do MARVEL Cosmic Invasion). Desligada por padrao. */
@@ -107,27 +72,6 @@ class GameSettingsStore(activity: Activity, titleId: String) {
         get() = isValid && preferences.getBoolean(key("webOfflineTermsEnabled"), false)
         set(value) {
             if (isValid) preferences.edit { putBoolean(key("webOfflineTermsEnabled"), value) }
-        }
-
-    /** Otimização do Hugare: 0: Use Global, 1: Enabled, 2: Disabled */
-    var hugareOptimizationsMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("hugareOptimizationsMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("hugareOptimizationsMode"), value) }
-        }
-
-    /** Otimizacoes de GPU: 0: Use Global, 1: Enabled, 2: Disabled */
-    var gpuOptimizationsMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("gpuOptimizationsMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("gpuOptimizationsMode"), value) }
-        }
-
-    /** 0: Use Global, 1: Enabled, 2: Disabled */
-    var vtgViaComputeMode: Int
-        get() = if (!isValid) 0 else preferences.getInt(key("vtgViaComputeMode"), 0)
-        set(value) {
-            if (isValid) preferences.edit { putInt(key("vtgViaComputeMode"), value) }
         }
 
     /** 0: Use Global, 1: Padrao, 2: Reduzido, 3: Desativado */
@@ -163,43 +107,10 @@ class GameSettingsStore(activity: Activity, titleId: String) {
             settings.vSyncMode
         )
         settings.enableShaderCache = safeBoolean(key("enableShaderCache"), settings.enableShaderCache)
-        settings.enableShaderLoopSafety = safeBoolean(key("enableShaderLoopSafety"), settings.enableShaderLoopSafety)
         settings.enableTextureRecompression = safeBoolean(key("enableTextureRecompression"), settings.enableTextureRecompression)
-        when (safeInt(key("vtgViaComputeMode"), 0)) {
-            1 -> settings.enableVtgViaCompute = true
-            2 -> settings.enableVtgViaCompute = false
-        }
-        when (safeInt(key("nceTrackingProtectionMode"), 0)) {
-            1 -> settings.enableNceTrackingProtection = true
-            2 -> settings.enableNceTrackingProtection = false
-        }
-        when (safeInt(key("vp9FFmpegMode"), 0)) {
-            1 -> settings.enableVp9FFmpeg = true
-            2 -> settings.enableVp9FFmpeg = false
-        }
-        when (safeInt(key("relaxedDmaCopyMode"), 0)) {
-            1 -> settings.enableRelaxedDmaCopy = true
-            2 -> settings.enableRelaxedDmaCopy = false
-        }
         when (safeInt(key("edenGpuMemoryMode"), 0)) {
             1 -> settings.enableEdenGpuMemory = true
             2 -> settings.enableEdenGpuMemory = false
-        }
-        when (safeInt(key("rejectUnmappedDescriptorsMode"), 0)) {
-            1 -> settings.enableRejectUnmappedDescriptors = true
-            2 -> settings.enableRejectUnmappedDescriptors = false
-        }
-        when (safeInt(key("asyncLarge3DUploadMode"), 0)) {
-            1 -> settings.enableAsyncLarge3DUpload = true
-            2 -> settings.enableAsyncLarge3DUpload = false
-        }
-        when (safeInt(key("hugareOptimizationsMode"), 0)) {
-            1 -> settings.enableHugareOptimizations = true
-            2 -> settings.enableHugareOptimizations = false
-        }
-        when (safeInt(key("gpuOptimizationsMode"), 0)) {
-            1 -> settings.enableGpuOptimizations = true
-            2 -> settings.enableGpuOptimizations = false
         }
         when (safeInt(key("drawFlushMode"), 0)) {
             1 -> settings.drawFlushMode = 0
@@ -239,17 +150,8 @@ class GameSettingsStore(activity: Activity, titleId: String) {
             putBoolean(key("memorySlackEnabled"), settings.memorySlackEnabled)
             putInt(key("vSyncMode"), settings.vSyncMode.ordinal)
             putBoolean(key("enableShaderCache"), settings.enableShaderCache)
-            putBoolean(key("enableShaderLoopSafety"), settings.enableShaderLoopSafety)
             putBoolean(key("enableTextureRecompression"), settings.enableTextureRecompression)
-            putInt(key("vtgViaComputeMode"), vtgViaComputeMode)
-            putInt(key("nceTrackingProtectionMode"), nceTrackingProtectionMode)
-            putInt(key("vp9FFmpegMode"), vp9FFmpegMode)
-            putInt(key("relaxedDmaCopyMode"), relaxedDmaCopyMode)
             putInt(key("edenGpuMemoryMode"), edenGpuMemoryMode)
-            putInt(key("rejectUnmappedDescriptorsMode"), rejectUnmappedDescriptorsMode)
-            putInt(key("asyncLarge3DUploadMode"), asyncLarge3DUploadMode)
-            putInt(key("gpuOptimizationsMode"), gpuOptimizationsMode)
-            putInt(key("hugareOptimizationsMode"), hugareOptimizationsMode)
             putBoolean(key("experimentalGameFixesEnabled"), experimentalGameFixesEnabled)
             putBoolean(key("nifmOfflineEnabled"), nifmOfflineEnabled)
             putBoolean(key("webOfflineTermsEnabled"), webOfflineTermsEnabled)

@@ -63,32 +63,19 @@ class QuickSettings(val activity: Activity) {
 
     var memoryManagerMode: MemoryManagerMode
     var enableShaderCache: Boolean
-    var enableShaderLoopSafety: Boolean
     var enableTextureRecompression: Boolean
-    var enableVtgViaCompute: Boolean
 
-    // NEOV2 NCE-PROT1: protecao de memoria NCE (corrige tela preta, ex.: MUA3). Desligada por padrao.
-    var enableNceTrackingProtection: Boolean
 
-    // NEOV2 DMA-RELAX1: copia DMA relaxada (como o Eden). Desligada por padrao.
-        var enableRelaxedDmaCopy: Boolean
 
-    // NEOV2-VP9EDEN1: VP9 pelo FFmpeg (como o Eden). Ligado por padrao na Current (Zelda LA); pode ser desligado por jogo.
-    var enableVp9FFmpeg: Boolean
 
     // NEOV2-GPUMEM1: memoria de GPU estilo Eden. Ligada por padrao; pode ser desligada por jogo.
     var enableEdenGpuMemory: Boolean
 
-    var enableHugareOptimizations: Boolean
 
     // NEOV2-AUDIO1: amplificacao do audio (1.0 = 100%, 2.0 = 200%).
     var audioBoost: Float
 
-    var enableRejectUnmappedDescriptors: Boolean
-    var enableAsyncLarge3DUpload: Boolean
 
-    // Opcao "Otimizacoes de GPU" (padrao ligado; alterada so pela configuracao por jogo).
-    var enableGpuOptimizations: Boolean
 
     // NEOV2 AUTOFLUSH1: 0 = Padrao, 1 = Reduzido, 2 = Desativado.
     var drawFlushMode: Int
@@ -178,14 +165,8 @@ class QuickSettings(val activity: Activity) {
         fsGlobalAccessLogMode = sharedPref.getInt("fsGlobalAccessLogMode", 0)
         ignoreMissingServices = sharedPref.getBoolean("ignoreMissingServices", false)
         enableShaderCache = sharedPref.getBoolean("enableShaderCache", true)
-        enableShaderLoopSafety = sharedPref.getBoolean("enableShaderLoopSafety", false)
         enableTextureRecompression = sharedPref.getBoolean("enableTextureRecompression", false)
-        enableVtgViaCompute = sharedPref.getBoolean("enableVtgViaCompute", true)
-        enableNceTrackingProtection = sharedPref.getBoolean("enableNceTrackingProtection", false)
-        enableRelaxedDmaCopy = sharedPref.getBoolean("enableRelaxedDmaCopy", false)
-        enableVp9FFmpeg = sharedPref.getBoolean("enableVp9FFmpeg", true)
         enableEdenGpuMemory = sharedPref.getBoolean("enableEdenGpuMemory", true)
-        enableHugareOptimizations = sharedPref.getBoolean("enableHugareOptimizations", false)
         audioBoost = sharedPref.getFloat("audioBoost", 1f).coerceIn(1f, 2f)
         drawFlushMode = sharedPref.getInt("drawFlushMode", 0)
         bufferReadbackMode = sharedPref.getInt("bufferReadbackMode", 0)
@@ -208,9 +189,6 @@ class QuickSettings(val activity: Activity) {
         // --- Reload: Controller Scale
         controllerScale = sharedPref.getFloat("controllerScale", 1.0f).coerceIn(0.5f, 1.5f)
 
-        enableRejectUnmappedDescriptors = sharedPref.getBoolean("enableRejectUnmappedDescriptors", false)
-        enableAsyncLarge3DUpload = sharedPref.getBoolean("enableAsyncLarge3DUpload", true)
-        enableGpuOptimizations = sharedPref.getBoolean("enableGpuOptimizations", true)
 
         if (!sharedPref.getBoolean("neoLogsDefaultOffV1", false)) {
             sharedPref.edit {
@@ -276,18 +254,9 @@ class QuickSettings(val activity: Activity) {
             putInt("fsGlobalAccessLogMode", fsGlobalAccessLogMode)
             putBoolean("ignoreMissingServices", ignoreMissingServices)
             putBoolean("enableShaderCache", enableShaderCache)
-            putBoolean("enableShaderLoopSafety", enableShaderLoopSafety)
             putBoolean("enableTextureRecompression", enableTextureRecompression)
-            putBoolean("enableVtgViaCompute", enableVtgViaCompute)
-            putBoolean("enableNceTrackingProtection", enableNceTrackingProtection)
-            putBoolean("enableRelaxedDmaCopy", enableRelaxedDmaCopy)
-            putBoolean("enableVp9FFmpeg", enableVp9FFmpeg)
             putBoolean("enableEdenGpuMemory", enableEdenGpuMemory)
-            putBoolean("enableHugareOptimizations", enableHugareOptimizations)
             putFloat("audioBoost", audioBoost)
-            putBoolean("enableRejectUnmappedDescriptors", enableRejectUnmappedDescriptors)
-            putBoolean("enableAsyncLarge3DUpload", enableAsyncLarge3DUpload)
-            putBoolean("enableGpuOptimizations", enableGpuOptimizations)
             putInt("drawFlushMode", drawFlushMode)
             putInt("bufferReadbackMode", bufferReadbackMode)
             putInt("strictSyncMode", strictSyncMode)

@@ -866,7 +866,7 @@ namespace Ryujinx.Graphics.Gpu.Memory
 
             // NEOV2 DMA-RELAX1: com o readback relaxado, a copia fica so na GPU (como quando a origem ja foi
             // modificada pela GPU), sem a escrita na CPU que obriga a baixar as texturas sobrepostas ao destino.
-            if (GraphicsConfig.RelaxedDmaCopy || srcBuffer.IsModified(srcAddress, size))
+            if (srcBuffer.IsModified(srcAddress, size))
             {
                 dstBuffer.SignalModified(dstAddress, size, BufferStage.Copy);
             }

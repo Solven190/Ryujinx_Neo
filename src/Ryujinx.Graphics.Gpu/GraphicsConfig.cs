@@ -63,7 +63,6 @@ namespace Ryujinx.Graphics.Gpu
         /// workaround for malformed shaders and is disabled by default because legitimate
         /// long-running loops can otherwise produce graphical corruption.
         /// </summary>
-        public static bool EnableShaderLoopSafety;
 
         /// <summary>
         /// Enables or disables shader SPIR-V compilation.
@@ -93,7 +92,6 @@ namespace Ryujinx.Graphics.Gpu
         /// GPU first. Same trade-off Eden makes in BufferCache::DMACopy. Off by default; can cause stale data in
         /// textures overlapping the copy destination.
         /// </summary>
-        public static bool RelaxedDmaCopy;
 
         /// <summary>
         /// NEOV2-GPUMEM1: "Memoria de GPU estilo Eden". When enabled, the buffer and texture caches free unused
@@ -106,13 +104,11 @@ namespace Ryujinx.Graphics.Gpu
         /// Rejects texture descriptors pointing to unmapped guest memory.
         /// OFF by default globally in Current. Descriptor address 0 is always rejected regardless of this setting.
         /// </summary>
-        public static bool RejectUnmappedTextureDescriptors;
 
         /// <summary>
         /// Enables asynchronous conversion and upload of large 3D textures (>= 4 MiB), like Eden's QueueAsyncUnswizzle.
         /// ON by default.
         /// </summary>
-        public static bool AsyncLarge3DTextureUpload = true;
     }
 #pragma warning restore CA2211
 }

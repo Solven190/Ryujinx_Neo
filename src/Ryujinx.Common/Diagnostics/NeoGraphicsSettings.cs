@@ -73,7 +73,7 @@
         public static StrictSyncMode? StrictSyncGameOverride { get; set; }
 
         // Resolved before each game creates its graphics resources; requires restarting the game.
-        private static bool _hugareOptimizationsEnabled;
+        private static bool _hugareOptimizationsEnabled = true;
 
         public static bool HugareOptimizationsEnabled
         {
@@ -81,29 +81,28 @@
             set => System.Threading.Volatile.Write(ref _hugareOptimizationsEnabled, value);
         }
 
-        // Opcao por jogo "Otimizacoes de GPU": desligada, estas otimizacoes voltam ao comportamento anterior.
-        // Todas com padrao ligado. Lidas quando o renderer e criado.
+        // Experimental GPU optimizations remain disabled for the Android Experimental build.
 
         /// <summary>TURNIP-FENCE1: VkFence no lugar da timeline no Turnip.</summary>
-        public static bool TurnipFenceEnabled { get; set; } = true;
+        public static bool TurnipFenceEnabled { get; set; } = false;
 
         /// <summary>CONDRENDER1: renderizacao condicional sem esperar a leitura na CPU (Turnip/Qualcomm).</summary>
-        public static bool ConditionalRenderNoWaitEnabled { get; set; } = true;
+        public static bool ConditionalRenderNoWaitEnabled { get; set; } = false;
 
         /// <summary>CMDFETCH1: listas de comando do GPFIFO lidas sem flush.</summary>
-        public static bool CommandFetchWithoutFlushEnabled { get; set; } = true;
+        public static bool CommandFetchWithoutFlushEnabled { get; set; } = false;
 
         /// <summary>TEXBUF-ALIGN1: offset exato da view de texture buffer no Turnip (correcao; o app mantem sempre ligado).</summary>
         public static bool TexelBufferExactOffsetEnabled { get; set; } = true;
 
         /// <summary>QUEUE-HYST1: histerese na fila do ThreadedRenderer.</summary>
-        public static bool QueueHysteresisEnabled { get; set; } = true;
+        public static bool QueueHysteresisEnabled { get; set; } = false;
 
         /// <summary>TIMELINE-LAZY1: consulta oportunista de fence so pelo valor ja conhecido.</summary>
-        public static bool TimelineLazyEnabled { get; set; } = true;
+        public static bool TimelineLazyEnabled { get; set; } = false;
 
         /// <summary>Trava do StagingBuffer.</summary>
-        public static bool StagingBufferLockEnabled { get; set; } = true;
+        public static bool StagingBufferLockEnabled { get; set; } = false;
 
         private static bool _nifmOfflineEnabled;
 
@@ -117,12 +116,12 @@
         public static bool WebOfflineTermsEnabled { get; set; }
 
         /// <summary>TexturePool mantem invalido o slot com endereco 0 ao ser modificado.</summary>
-        public static bool TexturePoolKeepInvalidEnabled { get; set; } = true;
+        public static bool TexturePoolKeepInvalidEnabled { get; set; } = false;
 
         /// <summary>
         /// NEOV2-VP9EDEN1: chave geral "VP9 pelo FFmpeg (Eden)". Decodifica os videos VP9 com o FFmpeg,
-        /// recompondo os cabecalhos como o Eden. Desligada por padrao; desligada, usa o decodificador em C#.
+        /// recompondo os cabecalhos como o Eden. Ativada nesta build Experimental.
         /// </summary>
-        public static bool Vp9FFmpegEnabled { get; set; }
+        public static bool Vp9FFmpegEnabled { get; set; } = true;
     }
 }

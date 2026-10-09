@@ -44,9 +44,8 @@ namespace LibKenjinx
             GraphicsConfig.EnableMacroJit = graphicsConfiguration.EnableMacroJit;
             GraphicsConfig.EnableMacroHLE = graphicsConfiguration.EnableMacroHLE;
             GraphicsConfig.EnableShaderCache = graphicsConfiguration.EnableShaderCache;
-            GraphicsConfig.EnableShaderLoopSafety = graphicsConfiguration.EnableShaderLoopSafety;
             GraphicsConfig.EnableTextureRecompression = graphicsConfiguration.EnableTextureRecompression;
-            GraphicsConfig.EnableVtgViaCompute = graphicsConfiguration.EnableVtgViaCompute;
+            GraphicsConfig.EnableVtgViaCompute = true;
 
             // NEOV2 AUTOFLUSH1: modo do Fast Draw Flush ja resolvido (global + override por jogo) na camada Android.
             DrawFlushMode drawFlushMode = graphicsConfiguration.DrawFlushMode switch
@@ -110,12 +109,6 @@ namespace LibKenjinx
             Logger.Info?.Print(
                 Ryujinx.Common.Logging.LogClass.Gpu,
                 $"[NEOV2-STRICT-SYNC] global={strictSyncGlobalMode} gameOverride={(graphicsConfiguration.StrictSyncGameOverride < 0 ? "Global" : strictSyncMode.ToString())} effective={strictSyncMode}");
-
-            Logger.Info?.Print(
-                Ryujinx.Common.Logging.LogClass.Gpu,
-                graphicsConfiguration.EnableShaderLoopSafety
-                    ? "[NEOV2-LOOP-GUARD] enabled; limit=8192"
-                    : "[NEOV2-LOOP-GUARD] disabled");
 
             GraphicsConfiguration = graphicsConfiguration;
 
@@ -335,9 +328,7 @@ namespace LibKenjinx
         public bool EnableMacroJit;
         public bool EnableMacroHLE;
         public bool EnableShaderCache;
-        public bool EnableShaderLoopSafety;
         public bool EnableTextureRecompression;
-        public bool EnableVtgViaCompute;
 
         // NEOV2 AUTOFLUSH1: 0 = Padrao, 1 = Reduzido, 2 = Desativado. DrawFlushGameOverride usa -1 para
         // "usar configuracao global" e serve apenas para o log inicial.
@@ -369,9 +360,7 @@ namespace LibKenjinx
             EnableMacroJit = false;
             EnableMacroHLE = true;
             EnableShaderCache = true;
-            EnableShaderLoopSafety = false;
             EnableTextureRecompression = false;
-            EnableVtgViaCompute = true;
             DrawFlushMode = 0;
             DrawFlushGlobalMode = 0;
             DrawFlushGameOverride = -1;

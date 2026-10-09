@@ -349,10 +349,6 @@ namespace Ryujinx.Graphics.Shader
         /// <summary>
         /// Queries whether generated SPIR-V loops should include a finite safety budget.
         /// </summary>
-        bool QueryShaderLoopSafetyEnabled()
-        {
-            return false;
-        }
 
         /// <summary>
         /// NEOV2-GMEMFB1: queries whether global memory accesses that cannot be traced to a storage buffer should

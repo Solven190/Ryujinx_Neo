@@ -57,6 +57,11 @@ android {
             applicationId "org.kenjinx.android"
             manifestPlaceholders = [applicationLabel: "@string/app_name"]
         }
+        experimental {
+            dimension "appid"
+            applicationId "org.kenjinx.android.experimental"
+            manifestPlaceholders = [applicationLabel: "@string/app_name_experimental"]
+        }
        optimized {
             dimension "appid"
             applicationId "com.garena.game.codm"

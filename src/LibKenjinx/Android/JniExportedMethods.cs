@@ -516,9 +516,7 @@ namespace LibKenjinx
                 bool enableMacroJit,
                 bool enableMacroHLE,
                 bool enableShaderCache,
-                bool enableShaderLoopSafety,
                 bool enableTextureRecompression,
-                bool enableVtgViaCompute,
                 int drawFlushMode,
                 int drawFlushGlobalMode,
                 int drawFlushGameOverride,
@@ -541,9 +539,7 @@ namespace LibKenjinx
                 EnableMacroJit = enableMacroJit,
                 EnableMacroHLE = enableMacroHLE,
                 EnableShaderCache = enableShaderCache,
-                EnableShaderLoopSafety = enableShaderLoopSafety,
                 EnableTextureRecompression = enableTextureRecompression,
-                EnableVtgViaCompute = enableVtgViaCompute,
                 DrawFlushMode = drawFlushMode,
                 DrawFlushGlobalMode = drawFlushGlobalMode,
                 DrawFlushGameOverride = drawFlushGameOverride,
@@ -1061,14 +1057,6 @@ namespace LibKenjinx
             Logger.Info?.Print(LogClass.Cpu, $"[NEOV2-NCE-PROT1] Tracking protection restore: {(enable ? "enabled" : "disabled")}");
         }
 
-        // NEOV2 DMA-RELAX1: chave geral e por jogo "Copia DMA relaxada", definida antes de carregar o jogo.
-        [UnmanagedCallersOnly(EntryPoint = "deviceSetRelaxedDmaCopy")]
-        public static void JniDeviceSetRelaxedDmaCopy(bool enable)
-        {
-            Ryujinx.Graphics.Gpu.GraphicsConfig.RelaxedDmaCopy = enable;
-            Logger.Info?.Print(LogClass.Gpu, $"[NEOV2-DMA-RELAX1] Relaxed DMA copy: {(enable ? "enabled" : "disabled")}");
-        }
-
         // NEOV2-GPUMEM1: chave geral e por jogo "Memoria de GPU estilo Eden", definida antes de carregar o jogo.
         [UnmanagedCallersOnly(EntryPoint = "deviceSetEdenGpuMemory")]
         public static void JniDeviceSetEdenGpuMemory(bool enable)
@@ -1201,12 +1189,6 @@ namespace LibKenjinx
             Logger.Info?.Print(LogClass.Audio, $"[NEOV2-AUDIO1] Amplificacao do audio: {Math.Clamp(gain, 1f, 2f) * 100:F0}%");
         }
 
-        [UnmanagedCallersOnly(EntryPoint = "deviceSetRejectUnmappedDescriptors")]
-        public static void JniDeviceSetRejectUnmappedDescriptors(bool enable)
-        {
-            Ryujinx.Graphics.Gpu.GraphicsConfig.RejectUnmappedTextureDescriptors = enable;
-        }
-
         // Chave por jogo "Compatibilidade grafica 2D" (correcoes do MARVEL Cosmic Invasion).
         [UnmanagedCallersOnly(EntryPoint = "deviceSetExperimentalGameFixes")]
         public static void JniDeviceSetExperimentalGameFixes(bool enable)
@@ -1214,13 +1196,7 @@ namespace LibKenjinx
             Ryujinx.Common.Diagnostics.NeoGraphicsSettings.ExperimentalGameFixesEnabled = enable;
         }
 
-        [UnmanagedCallersOnly(EntryPoint = "deviceSetAsyncLarge3DTextureUpload")]
-        public static void JniDeviceSetAsyncLarge3DTextureUpload(bool enable)
-        {
-            Ryujinx.Graphics.Gpu.GraphicsConfig.AsyncLarge3DTextureUpload = enable;
-        }
-
-        // Opcao por jogo "Otimizacoes de GPU" (o app envia o mesmo valor para todas, menos TEXBUF-ALIGN1, sempre ligado).
+        // Ajustes legados de GPU mantidos desativados na Experimental.
         [UnmanagedCallersOnly(EntryPoint = "deviceSetTurnipFence")]
         public static void JniDeviceSetTurnipFence(bool enable)
         {

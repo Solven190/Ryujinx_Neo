@@ -95,24 +95,6 @@ namespace Ryujinx.Graphics.Gpu
             }
         }
 
-        private readonly ConcurrentQueue<Image.Texture> _ready3DUploads = new();
-
-        internal void QueueReady3DUpload(Image.Texture texture)
-        {
-            _ready3DUploads.Enqueue(texture);
-        }
-
-        internal void ProcessReady3DUploads()
-        {
-            while (_ready3DUploads.TryDequeue(out Image.Texture texture))
-            {
-                if (texture.TryApplyReady3DUpload())
-                {
-                    break;
-                }
-            }
-        }
-
         /// <summary>
         /// Support buffer updater.
         /// </summary>

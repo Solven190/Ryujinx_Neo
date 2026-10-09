@@ -194,7 +194,7 @@ namespace Ryujinx.Cpu.Nce
         /// NEOV2 NCE-PROT1: per game switch for restoring tracking protection after guest permission changes.
         /// Off by default. Set by the frontend before the game is loaded.
         /// </summary>
-        public static bool TrackingProtectionRestoreEnabled { get; set; }
+        public static bool TrackingProtectionRestoreEnabled { get; set; } = true;
 
         public ref T GetRef<T>(ulong va) where T : unmanaged
         {

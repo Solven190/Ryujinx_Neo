@@ -191,7 +191,7 @@ namespace Ryujinx.Graphics.Gpu.Image
 
                 bool zeroAddress = address == 0;
 
-                if (zeroAddress || (GraphicsConfig.RejectUnmappedTextureDescriptors && !_channel.MemoryManager.IsMapped(address)))
+                if (zeroAddress)
                 {
                     _invalidMap.Set(id);
                     return ref descriptor;

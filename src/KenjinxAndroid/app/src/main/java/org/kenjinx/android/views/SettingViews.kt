@@ -367,18 +367,10 @@ class SettingViews {
 
             val enableShaderCache = remember { mutableStateOf(false) }
 
-            val enableShaderLoopSafety = remember { mutableStateOf(false) }
 
             val enableTextureRecompression = remember { mutableStateOf(false) }
-            val enableVtgViaCompute = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableVtgViaCompute) }
-            val enableNceTrackingProtection = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableNceTrackingProtection) }
-            val enableRelaxedDmaCopy = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableRelaxedDmaCopy) }
-            val enableVp9FFmpeg = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableVp9FFmpeg) }
             val enableEdenGpuMemory = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableEdenGpuMemory) }
-            val enableHugareOptimizations = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableHugareOptimizations) }
             val audioBoost = remember { mutableFloatStateOf(QuickSettings(mainViewModel.activity).audioBoost) }
-            val enableRejectUnmappedDescriptors = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableRejectUnmappedDescriptors) }
-            val enableAsyncLarge3DUpload = remember { mutableStateOf(QuickSettings(mainViewModel.activity).enableAsyncLarge3DUpload) }
 
             val drawFlushMode = remember { mutableStateOf(QuickSettings(mainViewModel.activity).drawFlushMode) }
 
@@ -539,10 +531,8 @@ class SettingViews {
 
                     enableShaderCache,
 
-                    enableShaderLoopSafety,
 
                     enableTextureRecompression,
-                    enableVtgViaCompute,
                     drawFlushMode,
                     bufferReadbackMode,
                     strictSyncMode,
@@ -631,10 +621,8 @@ class SettingViews {
 
                     enableShaderCache,
 
-                    enableShaderLoopSafety,
 
                     enableTextureRecompression,
-                    enableVtgViaCompute,
                     drawFlushMode,
                     bufferReadbackMode,
                     strictSyncMode,
@@ -698,15 +686,8 @@ class SettingViews {
                 qs.virtualControllerPreset = vcPreset.value
 
                 qs.orientationPreference = orientationPref.value
-                qs.enableVtgViaCompute = enableVtgViaCompute.value
-                qs.enableNceTrackingProtection = enableNceTrackingProtection.value
-                qs.enableRelaxedDmaCopy = enableRelaxedDmaCopy.value
-                qs.enableVp9FFmpeg = enableVp9FFmpeg.value
                 qs.enableEdenGpuMemory = enableEdenGpuMemory.value
-                qs.enableHugareOptimizations = enableHugareOptimizations.value
                 qs.audioBoost = audioBoost.floatValue
-                qs.enableRejectUnmappedDescriptors = enableRejectUnmappedDescriptors.value
-                qs.enableAsyncLarge3DUpload = enableAsyncLarge3DUpload.value
                 qs.drawFlushMode = drawFlushMode.value
                 qs.bufferReadbackMode = bufferReadbackMode.value
                 qs.strictSyncMode = strictSyncMode.value
@@ -1146,27 +1127,6 @@ class SettingViews {
 
                                         )
 
-                                        HighContrastToggle(
-
-                                            title = "Proteção de memória NCE",
-
-                                            description = "Mantém o rastreamento de memória da GPU quando o jogo muda permissões de memória em NCE. Corrige tela preta em alguns jogos (ex.: MUA3), mas pode causar travamentos em outros (ex.: MP4). Pode ser ajustado por jogo. (Requer reiniciar o jogo)",
-
-                                            checked = enableNceTrackingProtection.value,
-
-                                            onCheckedChange = {
-
-                                                enableNceTrackingProtection.value = it
-
-                                                val qsNceProtection = QuickSettings(mainViewModel.activity)
-
-                                                qsNceProtection.enableNceTrackingProtection = it
-
-                                                qsNceProtection.save()
-
-                                            }
-
-                                        )
 
 
 
@@ -1374,17 +1334,6 @@ class SettingViews {
 
 
 
-                                        HighContrastToggle(
-
-                                            title = "Proteção de Loops em Shaders (Shader Loop Safety)",
-
-                                            description = "Limita loops de shader que podem prender a GPU; pode causar falhas visuais em alguns jogos",
-
-                                            checked = enableShaderLoopSafety.value,
-
-                                            onCheckedChange = { enableShaderLoopSafety.value = it }
-
-                                        )
 
 
 
@@ -1400,17 +1349,6 @@ class SettingViews {
 
                                         )
 
-                                        HighContrastToggle(
-                                            title = "VTG via Compute",
-                                            description = "Executa determinados caminhos de Vertex/Geometry através de Compute para melhorar compatibilidade com shaders que dependem de semânticas não preservadas corretamente pelo caminho gráfico nativo. (Requer reiniciar o jogo)",
-                                            checked = enableVtgViaCompute.value,
-                                            onCheckedChange = {
-                                                enableVtgViaCompute.value = it
-                                                val qs = QuickSettings(mainViewModel.activity)
-                                                qs.enableVtgViaCompute = it
-                                                qs.save()
-                                            }
-                                        )
 
                                         SectionTitle("Sincronização rápida de Draw")
 
@@ -1449,28 +1387,6 @@ class SettingViews {
                                             }
                                         )
                                         HighContrastToggle(
-                                            title = "Cópia DMA relaxada",
-                                            description = "Cópias DMA deixam de baixar da GPU as texturas que serão sobrescritas, como no Eden. Aumenta o desempenho em alguns jogos (ex.: Diablo II), mas pode causar erros gráficos em outros. Pode ser ajustado por jogo. (Requer reiniciar o jogo)",
-                                            checked = enableRelaxedDmaCopy.value,
-                                            onCheckedChange = {
-                                                enableRelaxedDmaCopy.value = it
-                                                val qsRelaxedDma = QuickSettings(mainViewModel.activity)
-                                                qsRelaxedDma.enableRelaxedDmaCopy = it
-                                                qsRelaxedDma.save()
-                                            }
-                                        )
-                                        HighContrastToggle(
-                                            title = "Otimização do Hugare",
-                                            description = "Melhorias gráficas que podem aumentar o desempenho em alguns jogos, mas causar lentidão ou travamentos em outros. Desligada por padrão; também pode ser ajustada por jogo. Requer reiniciar o jogo.",
-                                            checked = enableHugareOptimizations.value,
-                                            onCheckedChange = {
-                                                enableHugareOptimizations.value = it
-                                                val qsHugare = QuickSettings(mainViewModel.activity)
-                                                qsHugare.enableHugareOptimizations = it
-                                                qsHugare.save()
-                                            }
-                                        )
-                                        HighContrastToggle(
                                             title = "Memória de GPU estilo Eden",
                                             description = "Como no Eden: buffers e texturas sem uso são liberados quando a memória de GPU passa de 1,6 GB (mais forte a partir de 3,2 GB). Se a RAM do Android acabar, o jogo é fechado em vez de travar o aparelho (ex.: DOOM Eternal). Ligado por padrão; pode ser ajustado por jogo. (Requer reiniciar o jogo)",
                                             checked = enableEdenGpuMemory.value,
@@ -1479,39 +1395,6 @@ class SettingViews {
                                                 val qsEdenGpuMemory = QuickSettings(mainViewModel.activity)
                                                 qsEdenGpuMemory.enableEdenGpuMemory = it
                                                 qsEdenGpuMemory.save()
-                                            }
-                                        )
-                                        HighContrastToggle(
-                                            title = "VP9 pelo FFmpeg (Eden)",
-                                            description = "Vídeos VP9 dos jogos (ex.: abertura do Zelda: Link's Awakening) passam a ser decodificados pelo FFmpeg, como no Eden, em vez do decodificador interno. Ligado por padrão. Se o vídeo de algum jogo ficar com erros (ex.: GRID Autosport), desligue nas configurações daquele jogo. (Requer reiniciar o jogo)",
-                                            checked = enableVp9FFmpeg.value,
-                                            onCheckedChange = {
-                                                enableVp9FFmpeg.value = it
-                                                val qsVp9 = QuickSettings(mainViewModel.activity)
-                                                qsVp9.enableVp9FFmpeg = it
-                                                qsVp9.save()
-                                            }
-                                        )
-                                        HighContrastToggle(
-                                            title = "Rejeitar descritores não mapeados",
-                                            description = "Descritores de textura com endereço não mapeado são descartados antes de ler o formato. Desligado por padrão global. Pode ser ajustado por jogo. (Requer reiniciar o jogo)",
-                                            checked = enableRejectUnmappedDescriptors.value,
-                                            onCheckedChange = {
-                                                enableRejectUnmappedDescriptors.value = it
-                                                val qsUp = QuickSettings(mainViewModel.activity)
-                                                qsUp.enableRejectUnmappedDescriptors = it
-                                                qsUp.save()
-                                            }
-                                        )
-                                        HighContrastToggle(
-                                            title = "Upload assíncrono de texturas 3D (estilo Eden)",
-                                            description = "Texturas 3D grandes (4 MB ou mais) são convertidas em segundo plano e enviadas à GPU num frame seguinte. Ativado por padrão global. Pode ser ajustado por jogo. (Requer reiniciar o jogo)",
-                                            checked = enableAsyncLarge3DUpload.value,
-                                            onCheckedChange = {
-                                                enableAsyncLarge3DUpload.value = it
-                                                val qsUp = QuickSettings(mainViewModel.activity)
-                                                qsUp.enableAsyncLarge3DUpload = it
-                                                qsUp.save()
                                             }
                                         )
 
@@ -2212,7 +2095,7 @@ class SettingViews {
 
                                                 Text(
 
-                                                    "Branch: neo-v2-nce2\nMotor NCE Armv8.2-A nativo com proteção de loop de shader e memória Slack.",
+                                                    "Experimental\nMotor NCE Armv8.2-A nativo com memória Slack.",
 
                                                     fontSize = 13.sp,
 

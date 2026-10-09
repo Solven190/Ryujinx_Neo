@@ -38,9 +38,7 @@ interface KenjinxNativeJna : Library {
         enableMacroJit: Boolean = false,
         enableMacroHLE: Boolean = true,
         enableShaderCache: Boolean = true,
-        enableShaderLoopSafety: Boolean = false,
         enableTextureRecompression: Boolean = false,
-        enableVtgViaCompute: Boolean = true,
         drawFlushMode: Int = 0,
         drawFlushGlobalMode: Int = 0,
         drawFlushGameOverride: Int = -1,
@@ -70,7 +68,6 @@ interface KenjinxNativeJna : Library {
     fun graphicsRendererRunLoop()
     fun graphicsSetFullscreenStretch(enable: Boolean)
     fun deviceSetNceTrackingProtection(enable: Boolean)
-    fun deviceSetRelaxedDmaCopy(enable: Boolean)
     // NEOV2-GPUMEM1: memoria de GPU estilo Eden (coleta de buffers/texturas + protecao contra falta de RAM).
     fun deviceSetEdenGpuMemory(enable: Boolean)
     fun deviceSetVp9FFmpeg(enable: Boolean)
@@ -95,9 +92,7 @@ interface KenjinxNativeJna : Library {
     fun deviceSetExperimentalGameFixes(enable: Boolean)
     fun deviceSetNifmOffline(enable: Boolean)
     fun deviceSetWebOfflineTerms(enable: Boolean)
-    fun deviceSetRejectUnmappedDescriptors(enable: Boolean)
-    fun deviceSetAsyncLarge3DTextureUpload(enable: Boolean)
-    // Opcao por jogo "Otimizacoes de GPU".
+    // Ajustes legados de GPU mantidos desativados na Experimental.
     fun deviceSetTurnipFence(enable: Boolean)
     fun deviceSetConditionalRenderNoWait(enable: Boolean)
     fun deviceSetCommandFetchNoFlush(enable: Boolean)
@@ -221,9 +216,7 @@ object KenjinxNative : KenjinxNativeJna by jnaInstance {
         enableMacroJit: Boolean,
         enableMacroHLE: Boolean,
         enableShaderCache: Boolean,
-        enableShaderLoopSafety: Boolean,
         enableTextureRecompression: Boolean,
-        enableVtgViaCompute: Boolean,
         drawFlushMode: Int,
         drawFlushGlobalMode: Int,
         drawFlushGameOverride: Int,
@@ -257,9 +250,7 @@ object KenjinxNative : KenjinxNativeJna by jnaInstance {
                 enableMacroJit,
                 enableMacroHLE,
                 enableShaderCache,
-                enableShaderLoopSafety,
                 enableTextureRecompression,
-                enableVtgViaCompute,
                 drawFlushMode,
                 drawFlushGlobalMode,
                 drawFlushGameOverride,
@@ -286,9 +277,7 @@ object KenjinxNative : KenjinxNativeJna by jnaInstance {
                     enableMacroJit,
                     enableMacroHLE,
                     enableShaderCache,
-                    enableShaderLoopSafety,
                     enableTextureRecompression,
-                    enableVtgViaCompute,
                     drawFlushMode,
                     drawFlushGlobalMode,
                     drawFlushGameOverride,

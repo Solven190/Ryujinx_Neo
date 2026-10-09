@@ -81,7 +81,6 @@ fun GameSettingsPage(
     var enablePptc by remember(titleId) { mutableStateOf(initial.enablePptc) }
     var memorySlack by remember(titleId) { mutableStateOf(initial.memorySlackEnabled) }
     var shaderCache by remember(titleId) { mutableStateOf(initial.enableShaderCache) }
-    var loopSafety by remember(titleId) { mutableStateOf(initial.enableShaderLoopSafety) }
     var textureRecompression by remember(titleId) { mutableStateOf(initial.enableTextureRecompression) }
     var macroHle by remember(titleId) { mutableStateOf(initial.enableMacroHLE) }
     var stretch by remember(titleId) { mutableStateOf(initial.stretchToFullscreen) }
@@ -93,17 +92,9 @@ fun GameSettingsPage(
     var vsync by remember(titleId) { mutableStateOf(initial.vSyncMode) }
     var resScale by remember(titleId) { mutableStateOf(initial.resScale) }
     var anisotropy by remember(titleId) { mutableStateOf(initial.maxAnisotropy) }
-    var vtgViaComputeMode by remember(titleId) { mutableStateOf(store.vtgViaComputeMode) }
-    var nceTrackingProtectionMode by remember(titleId) { mutableStateOf(store.nceTrackingProtectionMode) }
     var drawFlushMode by remember(titleId) { mutableStateOf(store.drawFlushMode) }
     var bufferReadbackMode by remember(titleId) { mutableStateOf(store.bufferReadbackMode) }
-    var vp9FFmpegMode by remember(titleId) { mutableStateOf(store.vp9FFmpegMode) }
-    var relaxedDmaCopyMode by remember(titleId) { mutableStateOf(store.relaxedDmaCopyMode) }
     var edenGpuMemoryMode by remember(titleId) { mutableStateOf(store.edenGpuMemoryMode) }
-    var rejectUnmappedDescriptorsMode by remember(titleId) { mutableStateOf(store.rejectUnmappedDescriptorsMode) }
-    var asyncLarge3DUploadMode by remember(titleId) { mutableStateOf(store.asyncLarge3DUploadMode) }
-    var hugareOptimizationsMode by remember(titleId) { mutableStateOf(store.hugareOptimizationsMode) }
-    var gpuOptimizationsMode by remember(titleId) { mutableStateOf(store.gpuOptimizationsMode) }
     var experimentalGameFixesEnabled by remember(titleId) { mutableStateOf(store.experimentalGameFixesEnabled) }
     var nifmOfflineEnabled by remember(titleId) { mutableStateOf(store.nifmOfflineEnabled) }
     var webOfflineTermsEnabled by remember(titleId) { mutableStateOf(store.webOfflineTermsEnabled) }
@@ -125,17 +116,9 @@ fun GameSettingsPage(
     val save = {
         if (custom) {
             store.isEnabled = true
-            store.vtgViaComputeMode = vtgViaComputeMode
-            store.nceTrackingProtectionMode = nceTrackingProtectionMode
             store.drawFlushMode = drawFlushMode
             store.bufferReadbackMode = bufferReadbackMode
-            store.vp9FFmpegMode = vp9FFmpegMode
-            store.relaxedDmaCopyMode = relaxedDmaCopyMode
             store.edenGpuMemoryMode = edenGpuMemoryMode
-            store.rejectUnmappedDescriptorsMode = rejectUnmappedDescriptorsMode
-            store.asyncLarge3DUploadMode = asyncLarge3DUploadMode
-            store.gpuOptimizationsMode = gpuOptimizationsMode
-            store.hugareOptimizationsMode = hugareOptimizationsMode
             store.experimentalGameFixesEnabled = experimentalGameFixesEnabled
             store.nifmOfflineEnabled = nifmOfflineEnabled
             store.webOfflineTermsEnabled = webOfflineTermsEnabled
@@ -146,7 +129,6 @@ fun GameSettingsPage(
                     this.enablePptc = enablePptc
                     this.memorySlackEnabled = memorySlack
                     this.enableShaderCache = shaderCache
-                    this.enableShaderLoopSafety = loopSafety
                     this.enableTextureRecompression = textureRecompression
                     this.enableMacroHLE = macroHle
                     this.stretchToFullscreen = stretch
@@ -175,7 +157,6 @@ fun GameSettingsPage(
         enablePptc = def.enablePptc
         memorySlack = def.memorySlackEnabled
         shaderCache = def.enableShaderCache
-        loopSafety = def.enableShaderLoopSafety
         textureRecompression = def.enableTextureRecompression
         macroHle = def.enableMacroHLE
         stretch = def.stretchToFullscreen
@@ -187,17 +168,9 @@ fun GameSettingsPage(
         vsync = def.vSyncMode
         resScale = def.resScale
         anisotropy = def.maxAnisotropy
-        vtgViaComputeMode = 0
-        nceTrackingProtectionMode = 0
         drawFlushMode = 0
         bufferReadbackMode = 0
-        vp9FFmpegMode = 0
-        relaxedDmaCopyMode = 0
         edenGpuMemoryMode = 0
-        rejectUnmappedDescriptorsMode = 0
-        asyncLarge3DUploadMode = 0
-        gpuOptimizationsMode = 0
-        hugareOptimizationsMode = 0
         experimentalGameFixesEnabled = false
         nifmOfflineEnabled = false
         webOfflineTermsEnabled = false
@@ -300,15 +273,7 @@ fun GameSettingsPage(
     val compatibilitySection: @Composable () -> Unit = {
         SettingsSection("Compatibilidade e correções") {
             SwitchSetting("Compatibilidade gráfica 2D", "Corrige tela preta e escala em jogos 2D.", experimentalGameFixesEnabled, custom) { experimentalGameFixesEnabled = it }
-            ChoiceSetting("Proteção de memória NCE", "Corrige tela preta em alguns jogos (ex.: MUA3).", globalOnOff, nceTrackingProtectionMode, custom) { nceTrackingProtectionMode = it }
-            ChoiceSetting("Otimizações de GPU", null, globalOnOff, gpuOptimizationsMode, custom) { gpuOptimizationsMode = it }
-            ChoiceSetting("Otimização do Hugare", "Pode melhorar o desempenho ou causar lentidão e travamentos, dependendo do jogo. Requer reiniciar o jogo.", globalOnOff, hugareOptimizationsMode, custom) { hugareOptimizationsMode = it }
-            ChoiceSetting("VTG via Compute", null, globalOnOff, vtgViaComputeMode, custom) { vtgViaComputeMode = it }
-            ChoiceSetting("VP9 pelo FFmpeg", "Desligue se o vídeo do jogo ficar com erros (ex.: GRID Autosport).", globalOnOff, vp9FFmpegMode, custom) { vp9FFmpegMode = it }
-            ChoiceSetting("Cópia DMA relaxada", "Mais desempenho em alguns jogos (ex.: Diablo II); pode causar erros gráficos.", globalOnOff, relaxedDmaCopyMode, custom) { relaxedDmaCopyMode = it }
             ChoiceSetting("Memória de GPU estilo Eden", "Libera buffers e texturas sem uso e fecha o jogo se a RAM acabar (ex.: DOOM Eternal). Desligue se aparecer erro gráfico.", globalOnOff, edenGpuMemoryMode, custom) { edenGpuMemoryMode = it }
-            ChoiceSetting("Rejeitar descritores não mapeados", null, globalOnOff, rejectUnmappedDescriptorsMode, custom) { rejectUnmappedDescriptorsMode = it }
-            ChoiceSetting("Upload assíncrono de texturas 3D (Eden)", null, globalOnOff, asyncLarge3DUploadMode, custom) { asyncLarge3DUploadMode = it }
         }
     }
 
@@ -335,7 +300,6 @@ fun GameSettingsPage(
                 strictSyncMode,
                 custom
             ) { strictSyncMode = it }
-            SwitchSetting("Shader Loop Safety", "Evita travamento em shaders com laços infinitos.", loopSafety, custom) { loopSafety = it }
             SwitchSetting("Macro HLE", null, macroHle, custom) { macroHle = it }
         }
     }

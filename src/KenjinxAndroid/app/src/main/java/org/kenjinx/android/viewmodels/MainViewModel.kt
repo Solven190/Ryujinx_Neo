@@ -271,25 +271,20 @@ class MainViewModel(val activity: MainActivity) {
                 -1
             }
 
-        // NEOV2 NCE-PROT1: valor efetivo ja resolvido por getSettingsForGame (global + override por jogo).
+        // A proteção NCE fica sempre ativa na Experimental.
         try {
-            KenjinxNative.deviceSetNceTrackingProtection(settings.enableNceTrackingProtection)
+            KenjinxNative.deviceSetNceTrackingProtection(true)
         } catch (_: Throwable) {
         }
 
-        // NEOV2 DMA-RELAX1: valor efetivo (global + override por jogo).
-        try {
-            KenjinxNative.deviceSetRelaxedDmaCopy(settings.enableRelaxedDmaCopy)
-        } catch (_: Throwable) {
-        }
         // NEOV2-GPUMEM1: memoria de GPU estilo Eden, valor efetivo (global + override por jogo).
         try {
             KenjinxNative.deviceSetEdenGpuMemory(settings.enableEdenGpuMemory)
         } catch (_: Throwable) {
         }
-        // NEOV2-VP9EDEN1: VP9 pelo FFmpeg (chave geral).
+        // VP9 pelo FFmpeg fica sempre ativo na Experimental.
         try {
-            KenjinxNative.deviceSetVp9FFmpeg(settings.enableVp9FFmpeg)
+            KenjinxNative.deviceSetVp9FFmpeg(true)
         } catch (_: Throwable) {
         }
         // NEOV2-AUDIO1: amplificacao do audio (100% a 200%).
@@ -297,28 +292,20 @@ class MainViewModel(val activity: MainActivity) {
             KenjinxNative.deviceSetAudioBoost(settings.audioBoost)
         } catch (_: Throwable) {
         }
-        try {
-            KenjinxNative.deviceSetRejectUnmappedDescriptors(settings.enableRejectUnmappedDescriptors)
-        } catch (_: Throwable) {
-        }
-        try {
-            KenjinxNative.deviceSetAsyncLarge3DTextureUpload(settings.enableAsyncLarge3DUpload)
-        } catch (_: Throwable) {
-        }
-        // Reset the effective Hugare setting for every launch, including shortcuts.
-        KenjinxNative.deviceSetHugareOptimizations(settings.enableHugareOptimizations)
+        // A otimização do Hugare fica sempre ativa, inclusive nos atalhos.
+        KenjinxNative.deviceSetHugareOptimizations(true)
 
-        // Opcao "Otimizacoes de GPU", antes de criar o renderer. TEXBUF-ALIGN1 e correcao e fica sempre ligado.
+        // Mantém as otimizações experimentais de GPU desativadas.
         try {
-            KenjinxNative.deviceSetTurnipFence(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetTurnipFence(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetConditionalRenderNoWait(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetConditionalRenderNoWait(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetCommandFetchNoFlush(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetCommandFetchNoFlush(false)
         } catch (_: Throwable) {
         }
         try {
@@ -326,28 +313,26 @@ class MainViewModel(val activity: MainActivity) {
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetQueueHysteresis(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetQueueHysteresis(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetTimelineLazy(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetTimelineLazy(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetStagingBufferLock(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetStagingBufferLock(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetTexturePoolKeepInvalid(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetTexturePoolKeepInvalid(false)
         } catch (_: Throwable) {
         }
 
         var success = KenjinxNative.graphicsInitialize(
             enableMacroHLE = settings.enableMacroHLE,
             enableShaderCache = settings.enableShaderCache,
-            enableShaderLoopSafety = settings.enableShaderLoopSafety,
             enableTextureRecompression = settings.enableTextureRecompression,
-            enableVtgViaCompute = settings.enableVtgViaCompute,
             drawFlushMode = settings.drawFlushMode,
             drawFlushGlobalMode = drawFlushGlobal,
             drawFlushGameOverride = drawFlushOverride,
@@ -455,25 +440,20 @@ class MainViewModel(val activity: MainActivity) {
         KenjinxNative.deviceSetExperimentalGameFixes(false)
         KenjinxNative.deviceSetNifmOffline(false)
 
-        // NEOV2 NCE-PROT1: sem perfil de jogo, vale a configuracao global.
+        // A proteção NCE fica sempre ativa na Experimental.
         try {
-            KenjinxNative.deviceSetNceTrackingProtection(settings.enableNceTrackingProtection)
+            KenjinxNative.deviceSetNceTrackingProtection(true)
         } catch (_: Throwable) {
         }
 
-        // NEOV2 DMA-RELAX1: sem perfil de jogo, vale a configuracao global.
-        try {
-            KenjinxNative.deviceSetRelaxedDmaCopy(settings.enableRelaxedDmaCopy)
-        } catch (_: Throwable) {
-        }
         // NEOV2-GPUMEM1: sem perfil de jogo, vale a configuracao global.
         try {
             KenjinxNative.deviceSetEdenGpuMemory(settings.enableEdenGpuMemory)
         } catch (_: Throwable) {
         }
-        // NEOV2-VP9EDEN1: VP9 pelo FFmpeg (chave geral).
+        // VP9 pelo FFmpeg fica sempre ativo na Experimental.
         try {
-            KenjinxNative.deviceSetVp9FFmpeg(settings.enableVp9FFmpeg)
+            KenjinxNative.deviceSetVp9FFmpeg(true)
         } catch (_: Throwable) {
         }
         // NEOV2-AUDIO1: amplificacao do audio (100% a 200%).
@@ -481,28 +461,20 @@ class MainViewModel(val activity: MainActivity) {
             KenjinxNative.deviceSetAudioBoost(settings.audioBoost)
         } catch (_: Throwable) {
         }
-        try {
-            KenjinxNative.deviceSetRejectUnmappedDescriptors(settings.enableRejectUnmappedDescriptors)
-        } catch (_: Throwable) {
-        }
-        try {
-            KenjinxNative.deviceSetAsyncLarge3DTextureUpload(settings.enableAsyncLarge3DUpload)
-        } catch (_: Throwable) {
-        }
-        // Reset the effective Hugare setting for every launch, including shortcuts.
-        KenjinxNative.deviceSetHugareOptimizations(settings.enableHugareOptimizations)
+        // A otimização do Hugare fica sempre ativa, inclusive nos atalhos.
+        KenjinxNative.deviceSetHugareOptimizations(true)
 
-        // Opcao "Otimizacoes de GPU", antes de criar o renderer. TEXBUF-ALIGN1 e correcao e fica sempre ligado.
+        // Mantém as otimizações experimentais de GPU desativadas.
         try {
-            KenjinxNative.deviceSetTurnipFence(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetTurnipFence(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetConditionalRenderNoWait(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetConditionalRenderNoWait(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetCommandFetchNoFlush(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetCommandFetchNoFlush(false)
         } catch (_: Throwable) {
         }
         try {
@@ -510,19 +482,19 @@ class MainViewModel(val activity: MainActivity) {
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetQueueHysteresis(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetQueueHysteresis(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetTimelineLazy(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetTimelineLazy(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetStagingBufferLock(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetStagingBufferLock(false)
         } catch (_: Throwable) {
         }
         try {
-            KenjinxNative.deviceSetTexturePoolKeepInvalid(settings.enableGpuOptimizations)
+            KenjinxNative.deviceSetTexturePoolKeepInvalid(false)
         } catch (_: Throwable) {
         }
 
@@ -532,9 +504,7 @@ class MainViewModel(val activity: MainActivity) {
         var success = KenjinxNative.graphicsInitialize(
             enableMacroHLE = settings.enableMacroHLE,
             enableShaderCache = settings.enableShaderCache,
-            enableShaderLoopSafety = settings.enableShaderLoopSafety,
             enableTextureRecompression = settings.enableTextureRecompression,
-            enableVtgViaCompute = settings.enableVtgViaCompute,
             drawFlushMode = settings.drawFlushMode,
             drawFlushGlobalMode = settings.drawFlushMode,
             drawFlushGameOverride = -1,
