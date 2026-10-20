@@ -1,98 +1,97 @@
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="Imagens/Ryujinx%20Neo%20Logo.png">
-    <img src="Imagens/Ryujinx%20Neo%20Logo%20Escura.png" alt="Logo do Ryujinx Neo" width="360">
+    <img src="Imagens/Ryujinx%20Neo%20Logo%20Escura.png" alt="Ryujinx Neo logo" width="360">
   </picture>
 
   <h1>Ryujinx Neo</h1>
-  <p><strong>Um projeto pessoal e experimental de emulação de Nintendo Switch para Android.</strong></p>
+  <p><strong>A personal, experimental Nintendo Switch emulation project for Android.</strong></p>
 </div>
 
 > [!IMPORTANT]
-> Este é um fork independente. Não é uma versão oficial do Ryujinx, do Kenji-NX, do Ryubing ou do Eden e não tem vínculo com a Nintendo. O projeto não inclui jogos, firmware, chaves ou conteúdo protegido de terceiros.
+> This is an independent fork. It is not an official version of Ryujinx, Kenji-NX, Ryubing, or Eden and has no affiliation with Nintendo. The project does not include games, firmware, keys, or third-party protected content.
 
-## Galeria de jogos
+## Game gallery
 
-Capturas reais dos meus testes do Ryujinx Neo no Android com jogos que não funcionavam no Eden no meu aparelho. O FPS mostrado em cada imagem é uma leitura instantânea, não uma média de desempenho.
+Real screenshots from my tests of Ryujinx Neo on Android with games that did not work in Eden on my device. The FPS shown in each image is an instantaneous reading, not an average performance measurement.
 
 <table>
   <tr>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260927-183800.webp"><img src="Imagens/Prints/Screenshot_20260927-183800.webp" alt="DOOM (2016) em gameplay, com texturas e efeitos renderizados" width="100%"></a></td>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-011337.webp"><img src="Imagens/Prints/Screenshot_20260928-011337.webp" alt="Jogo de ficção científica em primeira pessoa em gameplay" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260927-183800.webp"><img src="Imagens/Prints/Screenshot_20260927-183800.webp" alt="DOOM (2016) in gameplay, with textures and effects rendered" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-011337.webp"><img src="Imagens/Prints/Screenshot_20260928-011337.webp" alt="First-person science fiction game in gameplay" width="100%"></a></td>
   </tr>
   <tr>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260926-162507.webp"><img src="Imagens/Prints/Screenshot_20260926-162507.webp" alt="Aventura de Zelda em gameplay sob chuva" width="100%"></a></td>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-010644.webp"><img src="Imagens/Prints/Screenshot_20260928-010644.webp" alt="The Legend of Zelda: Link’s Awakening em gameplay" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260926-162507.webp"><img src="Imagens/Prints/Screenshot_20260926-162507.webp" alt="Zelda adventure in gameplay in the rain" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-010644.webp"><img src="Imagens/Prints/Screenshot_20260928-010644.webp" alt="The Legend of Zelda: Link’s Awakening in gameplay" width="100%"></a></td>
   </tr>
   <tr>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-011001.webp"><img src="Imagens/Prints/Screenshot_20260928-011001.webp" alt="Mortal Kombat 11 em uma luta" width="100%"></a></td>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260925-230950.webp"><img src="Imagens/Prints/Screenshot_20260925-230950.webp" alt="Jogo de luta com Athena e Mai em gameplay" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-011001.webp"><img src="Imagens/Prints/Screenshot_20260928-011001.webp" alt="Mortal Kombat 11 in a fight" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260925-230950.webp"><img src="Imagens/Prints/Screenshot_20260925-230950.webp" alt="Fighting game with Athena and Mai in gameplay" width="100%"></a></td>
   </tr>
   <tr>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260927-153807.webp"><img src="Imagens/Prints/Screenshot_20260927-153807.webp" alt="Mario + Rabbids Kingdom Battle na tela inicial" width="100%"></a></td>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-011206.webp"><img src="Imagens/Prints/Screenshot_20260928-011206.webp" alt="Jogo Pokémon em exploração de cidade" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260927-153807.webp"><img src="Imagens/Prints/Screenshot_20260927-153807.webp" alt="Mario + Rabbids Kingdom Battle on the title screen" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260928-011206.webp"><img src="Imagens/Prints/Screenshot_20260928-011206.webp" alt="Pokémon game exploring a city" width="100%"></a></td>
   </tr>
   <tr>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260926-162916.webp"><img src="Imagens/Prints/Screenshot_20260926-162916.webp" alt="Marvel Ultimate Alliance 3 em gameplay" width="100%"></a></td>
-    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260927-143011.webp"><img src="Imagens/Prints/Screenshot_20260927-143011.webp" alt="Jogo de ação em pixel art em gameplay" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260926-162916.webp"><img src="Imagens/Prints/Screenshot_20260926-162916.webp" alt="Marvel Ultimate Alliance 3 in gameplay" width="100%"></a></td>
+    <td width="50%" align="center"><a href="Imagens/Prints/Screenshot_20260927-143011.webp"><img src="Imagens/Prints/Screenshot_20260927-143011.webp" alt="Pixel art action game in gameplay" width="100%"></a></td>
   </tr>
 </table>
 
-**DOOM (2016)** é um caso especial: o Kenji-NX não iniciava o jogo e, nos meus testes, o Eden não renderizava suas texturas. No Neo, a cena aparece renderizada no registro acima.
+**DOOM (2016)** is a special case: Kenji-NX would not boot the game, and in my tests, Eden did not render its textures. In Neo, the scene appears rendered in the screenshot above.
 
-## Por que o projeto nasceu
+## Why the project started
 
-O Ryujinx Neo começou por um motivo simples e pessoal: eu queria jogar alguns títulos que, no meu aparelho e na versão do Eden que eu utilizava, não rodavam como eu precisava. A linha Android do Kenji-NX oferecia outro caminho técnico. Passei a estudá-la, testar hipóteses e adaptar o código para os jogos e dispositivos que tenho à mão.
+Ryujinx Neo started for a simple, personal reason: I wanted to play some titles that, on my device and in the version of Eden I was using, did not run the way I needed. Kenji-NX's Android line offered another technical path. I began studying it, testing hypotheses, and adapting the code for the games and devices I have at hand.
 
-O nome **Neo** representa esse trabalho de evolução experimental: ajustes de NCE, GPU/Vulkan, compatibilidade por jogo e uma interface Android própria. O objetivo é aprender, melhorar a experiência e compartilhar o que funcionar, sem prometer compatibilidade universal nem desempenho igual em todo aparelho.
+The name **Neo** represents this work of experimental evolution: NCE tweaks, GPU/Vulkan work, per-game compatibility, and a custom Android interface. The goal is to learn, improve the experience, and share what works, without promising universal compatibility or identical performance on every device.
 
-Este é um **projeto pessoal**, mantido no meu tempo livre. Não é um produto comercial nem uma continuação oficial de qualquer projeto citado aqui.
+This is a **personal project**, maintained in my free time. It is not a commercial product or an official continuation of any project mentioned here.
 
-## De onde vem o código
+## Where the code comes from
 
-A origem deve ficar clara:
+The origin should be clear:
 
-| Projeto | Relação com o Ryujinx Neo |
+| Project | Relationship to Ryujinx Neo |
 | --- | --- |
-| [Ryujinx](https://github.com/Ryujinx) | Projeto original do emulador, criado por **gdkchan**. Sua arquitetura e o trabalho de seus contribuidores formam a base histórica. |
-| [Kenji-NX](https://github.com/Kenji-NX) | Base direta deste fork, especialmente a linha Android/Bionic. O README antigo do Kenji-NX ainda estava neste repositório quando o Neo foi iniciado. O [endereço histórico do código](https://git.ryujinx.app/projects/Kenji-NX) pode não estar disponível. |
-| [Ryubing](https://github.com/Ryubing) | Continuidade comunitária do ecossistema Ryujinx; correções e comportamento são estudados como referência quando relevantes. |
-| [Eden](https://git.eden-emu.dev/eden-emu/eden/) | Referência técnica para algumas ideias e comparações de CPU/GPU. Também foi parte da motivação pessoal para experimentar outro caminho em jogos que não funcionavam no meu contexto. |
-| [Strato](https://github.com/strato-emu/strato) e experimentos anteriores do Neo/Gezinjinx | Referências de estudo e comparação em Android, NCE e gráficos; a presença nesta lista não significa que todo o código desses projetos foi incorporado. |
-| [Mesa/Turnip](https://gitlab.freedesktop.org/mesa/mesa) e [Vulkan](https://www.khronos.org/vulkan/) | Drivers, API e documentação usados para investigar o backend gráfico. |
+| [Ryujinx](https://github.com/Ryujinx) | The original emulator project, created by **gdkchan**. Its architecture and the work of its contributors form the historical foundation. |
+| [Kenji-NX](https://github.com/Kenji-NX) | The direct base of this fork, especially the Android/Bionic line. The old Kenji-NX README was still in this repository when Neo was started. The [historical code address](https://git.ryujinx.app/projects/Kenji-NX) may no longer be available. |
+| [Ryubing](https://github.com/Ryubing) | Community continuation of the Ryujinx ecosystem; fixes and behavior are studied as references when relevant. |
+| [Eden](https://git.eden-emu.dev/eden-emu/eden/) | Technical reference for some ideas and CPU/GPU comparisons. It was also part of the personal motivation to try another path for games that did not work in my context. |
+| [Strato](https://github.com/strato-emu/strato) and earlier Neo/Gezinjinx experiments | Study and comparison references for Android, NCE, and graphics; appearing in this list does not mean all code from those projects has been incorporated. |
+| [Mesa/Turnip](https://gitlab.freedesktop.org/mesa/mesa) and [Vulkan](https://www.khronos.org/vulkan/) | Drivers, API, and documentation used to investigate the graphics backend. |
 
-As mudanças próprias do Neo são rastreáveis pelo [histórico da branch `neo-v2-nce2`](https://github.com/Sunshinin11/Ryujinx_Neo/commits/neo-v2-nce2). Quando uma ideia ou implementação vem de outro projeto, procuro registrar essa origem nos commits. Os créditos originais e as licenças permanecem válidos; consulte [LICENSE.txt](LICENSE.txt) e [THIRDPARTY.md](distribution/legal/THIRDPARTY.md).
+Neo's own changes can be traced through the [history of the `neo-v2-nce2` branch](https://github.com/Sunshinin11/Ryujinx_Neo/commits/neo-v2-nce2). When an idea or implementation comes from another project, I try to record that origin in the commits. Original credits and licenses remain valid; see [LICENSE.txt](LICENSE.txt) and [THIRDPARTY.md](distribution/legal/THIRDPARTY.md).
 
-## Transparência sobre o desenvolvimento: vibe coding
+## Development transparency: vibe coding
 
-**Sim, este projeto usa vibe coding e ferramentas de inteligência artificial.** Eu as uso para estudar código, comparar abordagens, propor e implementar mudanças, revisar erros e escrever documentação. Isso faz parte do processo e não será escondido nem apresentado como trabalho inteiramente escrito à mão.
+**Yes, this project uses vibe coding and artificial intelligence tools.** I use them to study code, compare approaches, propose and implement changes, review errors, and write documentation. This is part of the process and will not be hidden or presented as work written entirely by hand.
 
-Eu defino os problemas que quero resolver, escolho o que experimentar e testo os resultados nos aparelhos e jogos aos quais tenho acesso. Assistência de IA não garante que uma mudança esteja correta. Uma parte do código pode ser experimental, conter regressões ou ainda carecer de validação ampla. Por isso, o repositório mantém histórico, opções por jogo e documentação dos resultados positivos **e negativos**.
+I define the problems I want to solve, choose what to experiment with, and test the results on the devices and games I have access to. AI assistance does not guarantee that a change is correct. Some of the code may be experimental, contain regressions, or still lack broad validation. For this reason, the repository keeps history, per-game options, and documentation of positive **and negative** results.
 
-Contribuições de outras pessoas, bases herdadas e referências externas devem receber seus devidos créditos. Se você encontrar uma atribuição ausente ou incorreta, abra uma issue indicando o trecho e a fonte.
+Contributions from other people, inherited bases, and external references must receive proper credit. If you find a missing or incorrect attribution, open an issue indicating the excerpt and the source.
 
-## O que o Neo acrescenta
+## What Neo adds
 
-- Interface Android em português, identidade visual e logo próprios, biblioteca nos modos **NEO** e **Switch**, perfis por jogo e menu rápido durante a emulação.
-- Melhorias experimentais no backend Vulkan/Turnip: submissões, sincronização, cache, formatos de textura e uso do backend em núcleos rápidos quando aplicável.
-- Trabalho em **NCE Neo 2**, proteção de memória opcional e ajustes de compatibilidade para jogos específicos.
-- Controles globais e por jogo para NCE/JIT, modo Dock/Portátil, Memory Slack, shaders, VSync, resolução, driver gráfico e outras opções.
-- Gerenciador de drivers Vulkan com seleção do driver do sistema ou personalizado, catálogo de download e verificações de integridade dos pacotes.
-- Gerenciamento de atualizações, DLCs, mods, cheats, saves, Amiibo e caches pela interface.
+- Portuguese-language Android interface, custom visual identity and logo, library in **NEO** and **Switch** modes, per-game profiles, and a quick menu during emulation.
+- Experimental improvements to the Vulkan/Turnip backend: submissions, synchronization, cache, texture formats, and use of the backend on fast cores when applicable.
+- Work on **NCE Neo 2**, optional memory protection, and compatibility tweaks for specific games.
+- Global and per-game controls for NCE/JIT, Dock/Handheld mode, Memory Slack, shaders, VSync, resolution, graphics driver, and other options.
+- Vulkan driver manager with system or custom driver selection, download catalog, and package integrity checks.
+- Management of updates, DLCs, mods, cheats, saves, Amiibo, and caches through the interface.
 
-O [CHANGELOG.md](CHANGELOG.md) detalha o que foi adicionado, corrigido e observado. Algumas opções existem justamente para que uma otimização possa ser desligada em um jogo com regressão.
+[CHANGELOG.md](CHANGELOG.md) details what was added, fixed, and observed. Some options exist precisely so that an optimization can be disabled in a game with a regression.
 
-## Estado do projeto
+## Project status
 
-A versão Android identificada no código desta branch é **0.0.1**. O desenvolvimento é experimental e voltado sobretudo a Android ARM64 e Vulkan/Adreno. Resultados relatados para um jogo, driver e aparelho não devem ser tratados como garantia para outros. Consulte os commits e o changelog para saber o estado de cada ajuste.
+The Android version identified in the code of this branch is **0.0.1**. Development is experimental and aimed mainly at Android ARM64 and Vulkan/Adreno. Results reported for one game, driver, and device should not be treated as a guarantee for others. Consult the commits and changelog to know the state of each adjustment.
 
-O código-fonte, por si só, não comprova que cada funcionalidade foi testada na última build. Ao relatar um problema, informe o jogo, aparelho, driver, modo NCE/JIT, configurações relevantes, versão ou commit e, se possível, um log.
+The source code alone does not prove that every feature was tested in the latest build. When reporting a problem, provide the game, device, driver, NCE/JIT mode, relevant settings, version or commit, and, if possible, a log.
 
-## Uso responsável
+## Responsible use
 
-Forneça seus próprios jogos e arquivos de sistema. Este repositório não distribui jogos, firmware, chaves nem APKs de terceiros. Antes de instalar uma build, confira a origem e a versão correspondente ao código.
+Provide your own games and system files. This repository does not distribute games, firmware, keys, or third-party APKs. Before installing a build, check its origin and the version corresponding to the code.
 
-## Licença e agradecimentos
+## License and acknowledgments
 
-O código deste repositório segue a [licença MIT](LICENSE.txt), respeitadas as licenças dos componentes de terceiros em [THIRDPARTY.md](distribution/legal/THIRDPARTY.md). Obrigado a gdkchan e aos contribuidores de Ryujinx, Kenji-NX, Ryubing e dos demais projetos e bibliotecas que tornaram este trabalho possível. O Ryujinx Neo existe sobre essa base; o crédito por ela continua sendo de seus autores.
-
+The code in this repository follows the [MIT license](LICENSE.txt), respecting the licenses of third-party components in [THIRDPARTY.md](distribution/legal/THIRDPARTY.md). Thanks to gdkchan and the contributors of Ryujinx, Kenji-NX, Ryubing, and the other projects and libraries that made this work possible. Ryujinx Neo exists on top of that foundation; credit for it remains with its authors.
